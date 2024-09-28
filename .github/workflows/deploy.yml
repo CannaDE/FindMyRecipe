@@ -38,4 +38,6 @@ jobs:
             - /dev
             - /.github
             - /.git
+            - /cronjob/__pycache__/**
+            - /cronjob/finale/__pycache__/**
             '
