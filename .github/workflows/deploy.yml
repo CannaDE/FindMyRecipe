@@ -20,7 +20,7 @@ jobs:
 
       - name: Update global.php
         run: |
-          sed -i 's/define(\'DOMAIN_NAME\', \'rezept.test\');/define(\'DOMAIN_NAME\', \'finde-mein-rezept.de\');/' global.php
+          sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'finde-me-rezept.de');/" global.php
 
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
