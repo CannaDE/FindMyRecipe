@@ -1,0 +1,29 @@
+{
+    "name": "core/findmyrecipe",
+    "description": "FindMyRecipe build in php8.1/8.2",
+    "homepage": "https://finde-mein-rezept.de",
+    "version": "dev-1.0.0",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Kevin Härtling",
+            "email": "developer@finde-mein-rezept.de",
+            "homepage": "https://finde-mein-rezept.de",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "fmr\\": "core/"
+        }
+    },
+    "require": {
+        "psr/http-message": "^1.0",
+        "psr/http-server-handler": "^1.0",
+        "laminas/laminas-diactoros": "^2.4",
+        "psr/http-server-middleware": "^1.0",
+        "paragonie/constant_time_encoding": "^2.6",
+        "laminas/laminas-httphandlerrunner": "^2.3"
+    }
+}

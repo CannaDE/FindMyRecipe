@@ -1,0 +1,174 @@
+{
+    "websites": [
+        {
+            "name": "WasKochIch.com",
+            "source_id": 4,
+            "start_url": "https://waskochich.com/kategorien/pasta-rezepte",
+            "page_param": "?p=",
+            "num_pages": 1,
+            "selectors": {
+                "recipe_selector": ".col-x2s-12.col-sm-6.col-md-6.col-height a",
+                "ingredient_selector": ".ingredient",
+                "title_selector": ".col-xs-12.col-sm-12.col-md-12.text-left h1, .col-xs-12.col-sm-6.col-md-6.text-left h1",
+                "description_selector": ".teaser-detail p",
+                "image_selector": ".thumbnail img",
+                "duration_selector": ".recipe-times span"
+            }
+        },
+        {
+            "name": "WasKochIch.com",
+            "source_id": 4,
+            "start_url": "https://waskochich.com/kategorien/fleisch-rezepte",
+            "page_param": "?p=",
+            "num_pages": 1,
+            "selectors": {
+                "recipe_selector": ".col-x2s-12.col-sm-6.col-md-6.col-height a",
+                "ingredient_selector": ".ingredient",
+                "title_selector": ".col-xs-12.col-sm-12.col-md-12.text-left h1, .col-xs-12.col-sm-6.col-md-6.text-left h1",
+                "description_selector": ".teaser-detail p",
+                "image_selector": ".thumbnail img",
+                "duration_selector": ".recipe-times span"
+            }
+        },
+        {
+            "name": "WasKochIch.com",
+            "source_id": 4,
+            "start_url": "https://waskochich.com/kategorien/kuchen-rezepte",
+            "page_param": "?p=",
+            "num_pages": 1,
+            "selectors": {
+                "recipe_selector": ".col-x2s-12.col-sm-6.col-md-6.col-height a",
+                "ingredient_selector": ".ingredient",
+                "title_selector": ".col-xs-12.col-sm-12.col-md-12.text-left h1, .col-xs-12.col-sm-6.col-md-6.text-left h1",
+                "description_selector": ".teaser-detail p",
+                "image_selector": ".thumbnail img",
+                "duration_selector": ".recipe-times span"
+            }
+        },
+        {
+            "name": "WasKochIch.com",
+            "source_id": 4,
+            "start_url": "https://waskochich.com/kategorien/salat-rezepte",
+            "page_param": "?p=",
+            "num_pages": 1,
+            "selectors": {
+                "recipe_selector": ".col-x2s-12.col-sm-6.col-md-6.col-height a",
+                "ingredient_selector": ".ingredient",
+                "title_selector": ".col-xs-12.col-sm-12.col-md-12.text-left h1, .col-xs-12.col-sm-6.col-md-6.text-left h1",
+                "description_selector": ".teaser-detail p",
+                "image_selector": ".thumbnail img",
+                "duration_selector": ".recipe-times span"
+            }
+        },
+        {
+            "name": "WasKochIch.com",
+            "source_id": 4,
+            "start_url": "https://waskochich.com/kategorien/bbq-rezepte",
+            "page_param": "?p=",
+            "num_pages": 1,
+            "selectors": {
+                "recipe_selector": ".col-x2s-12.col-sm-6.col-md-6.col-height a",
+                "ingredient_selector": ".ingredient",
+                "title_selector": ".col-xs-12.col-sm-12.col-md-12.text-left h1, .col-xs-12.col-sm-6.col-md-6.text-left h1",
+                "description_selector": ".teaser-detail p",
+                "image_selector": ".thumbnail img",
+                "duration_selector": ".recipe-times span"
+            }
+        },
+        {
+            "name": "GuteKueche.de",
+            "source_id": 3,
+            "start_url": "https://www.gutekueche.de/apfelkuchen-alle-rezepte",
+            "page_param": "?p=",
+            "num_pages": 9,
+            "selectors": {
+                "recipe_selector": ".col.col-2-3.col-xs-2-2 h3 a",
+                "ingredient_selector": ".ingredients-table",
+                "title_selector": "#recipe h1",
+                "description_selector": ".teaser-detail p",
+                "image_selector": ".img.mbotttom10 img",
+                "duration_selector": ".recipe-times span"
+            }
+        },
+        {
+            "name": "kochbar.de",
+            "source_id": 2,
+            "start_url": "https://www.kochbar.de/rezepte/alle-rezepte.html",
+            "page_param": "?page=",
+            "num_pages": 29850,
+            "selectors": {
+                "recipe_selector": ".kb-teaser-list-item-wrapper.masked-url",
+                "ingredient_selector": ".jt-ingredients tr",
+                "title_selector": "h2.recipe-head-headline",
+                "description_selector": "p.description",
+                "image_selector": ".scroll-snap-slide img",
+                "duration_selector": "span.compact strong"
+            }
+        },
+        {
+            "name": "ichkoche",
+            "source_id": 1,
+            "start_url": "https://www.ichkoche.at/rezepte-az/a",
+            "page_param": "?page=",
+            "num_pages": 35,
+            "recipe_selector": "article.box h3 a",
+            "ingredient_selector": "li.ingredient",
+            "title_selector": "h1.page_title",
+            "description_selector": "p.description",
+            "image_selector": ".image_wrap img",
+            "duration_selector": ".duration button"
+        },
+        {
+            "name": "ichkoche",
+            "source_id": 1,
+            "start_url": "https://www.ichkoche.at/rezepte-az/b",
+            "page_param": "?page=",
+            "num_pages": 96,
+            "recipe_selector": "article.box h3 a",
+            "ingredient_selector": "li.ingredient",
+            "title_selector": "h1.page_title",
+            "description_selector": "p.description",
+            "image_selector": ".image_wrap img",
+            "duration_selector": ".duration button"
+        },
+        {
+            "name": "ichkoche",
+            "source_id": 1,
+            "start_url": "https://www.ichkoche.at/rezepte-az/c",
+            "page_param": "?page=",
+            "num_pages": 40,
+            "recipe_selector": "article.box h3 a",
+            "ingredient_selector": "li.ingredient",
+            "title_selector": "h1.page_title",
+            "description_selector": "p.description",
+            "image_selector": ".image_wrap img",
+            "duration_selector": ".duration button"
+        },
+        {
+            "name": "ichkoche",
+            "source_id": 1,
+            "start_url": "https://www.ichkoche.at/rezepte-az/d",
+            "page_param": "?page=",
+            "num_pages": 16,
+            "recipe_selector": "article.box h3 a",
+            "ingredient_selector": "li.ingredient",
+            "title_selector": "h1.page_title",
+            "description_selector": "p.description",
+            "image_selector": ".image_wrap img",
+            "duration_selector": ".duration button"
+        },
+        {
+            "name": "ichkoche",
+            "source_id": 1,
+            "start_url": "https://www.ichkoche.at/rezepte-az/e",
+            "page_param": "?page=",
+            "num_pages": 52,
+            "recipe_selector": "article.box h3 a",
+            "ingredient_selector": "li.ingredient",
+            "title_selector": "h1.page_title",
+            "description_selector": "p.description",
+            "image_selector": ".image_wrap img",
+            "duration_selector": ".duration button"
+        }
+    ]
+}

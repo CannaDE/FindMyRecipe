@@ -1,0 +1,5 @@
+# Aktiviert RewriteEngine für URL-Umschreibungen
+RewriteEngine On
+
+# Stellt sicher, dass der Benutzer auf die Datei botinfo.html umgeleitet wird, wenn /botinfo aufgerufen wird
+RewriteRule ^botinfo$ botinfo.html [L]

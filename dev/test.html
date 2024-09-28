@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezept Finder</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #suggestions { border: 1px solid #ccc; max-height: 150px; overflow-y: auto; }
+        .suggestion { padding: 5px; cursor: pointer; }
+        .suggestion:hover { background-color: #f0f0f0; }
+        .selected-ingredient { margin: 5px; display: inline-block; padding: 5px; background: #d0e7ff; border: 1px solid #0056b3; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<h1>Rezept Finder</h1>
+<input type="text" id="ingredientSearch" placeholder="Zutat suchen..." onkeyup="fetchSuggestions()" autocomplete="off">
+<div id="suggestions"></div>
+<div id="selectedIngredients"></div>
+<button onclick="getRecipes()">Rezepte anzeigen</button>
+
+<h2>Gefundene Rezepte:</h2>
+<div id="recipeResults"></div>
+
+<script>
+let selectedIngredients = [];
+
+function fetchSuggestions() {
+    const input = document.getElementById('ingredientSearch').value;
+
+    if (input.length < 1) {
+        document.getElementById('suggestions').innerHTML = '';
+        return;
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'fetch_ingredients.php?query=' + encodeURIComponent(input), true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            document.getElementById('suggestions').innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send();
+}
+
+function selectIngredient(ingredient) {
+    if (!selectedIngredients.includes(ingredient)) {
+        selectedIngredients.push(ingredient);
+        updateSelectedIngredients();
+    }
+    document.getElementById('ingredientSearch').value = '';
+    document.getElementById('suggestions').innerHTML = '';
+}
+
+function updateSelectedIngredients() {
+    const container = document.getElementById('selectedIngredients');
+    container.innerHTML = '';
+
+    selectedIngredients.forEach(ingredient => {
+        const ingredientDiv = document.createElement('div');
+        ingredientDiv.className = 'selected-ingredient';
+        ingredientDiv.innerText = ingredient;
+        ingredientDiv.onclick = () => removeIngredient(ingredient);
+        container.appendChild(ingredientDiv);
+    });
+}
+
+function removeIngredient(ingredient) {
+    selectedIngredients = selectedIngredients.filter(i => i !== ingredient);
+    updateSelectedIngredients();
+}
+
+function getRecipes() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'fetch_recipes.php?ingredients=' + encodeURIComponent(JSON.stringify(selectedIngredients)), true);    xhr.onload = function() {
+        if (xhr.status === 200) {
+            document.getElementById('recipeResults').innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send();
+}
+</script>
+
+</body>
+</html>
