@@ -10,9 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
-        
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
       - name: Update global.php
         run: |
           sed -i 's/define(\'DOMAIN_NAME\', \'rezept.test\');/define(\'DOMAIN_NAME\', \'finde-mein-rezept.de\');/' global.php
