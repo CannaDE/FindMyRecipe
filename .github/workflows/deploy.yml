@@ -32,6 +32,8 @@ jobs:
           server-dir: /
           protocol: ftps
           port: 21
+          timeout: 60000
+          passive: true
           exclude: |
             /dev
             .github/
