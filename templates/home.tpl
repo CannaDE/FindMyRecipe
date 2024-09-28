@@ -178,6 +178,8 @@
             background-position: center;
             top: 0;
             z-index: 1;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
 
         .header-text {
@@ -413,7 +415,7 @@
                     <div class="ingredient-button">Skyr</div>
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🥛 Fleischprodukte</h2>
+                    <h2>🥩 Fleischprodukte</h2>
                     <div class="ingredient-button">Hähnchenbrust</div>
                     <div class="ingredient-button">Rinderhackfleisch</div>
                     <div class="ingredient-button">Schweinefilet</div>
@@ -430,7 +432,7 @@
                     <div class="ingredient-button">Putenkeule</div>
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🥛 Getreide und Hülsenfrüchte</h2>
+                    <h2>🫘 Getreide und Hülsenfrüchte</h2>
                     <div class="ingredient-button">Reis</div>
                     <div class="ingredient-button">Nudeln</div>
                     <div class="ingredient-button">Quinoa</div>
@@ -447,7 +449,7 @@
                     <div class="ingredient-button">Amaranth</div>
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🥛 Gewürze und Kräuter</h2>
+                    <h2>🌿 Gewürze und Kräuter</h2>
                     <div class="ingredient-button">Salz</div>
                     <div class="ingredient-button">Pfeffer</div>
                     <div class="ingredient-button">Paprika</div>
@@ -464,7 +466,7 @@
                     <div class="ingredient-button">Petersilie</div>
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🥛 Backzutaten</h2>
+                    <h2>🍰 Backzutaten</h2>
                     <div class="ingredient-button">Mehl</div>
                     <div class="ingredient-button">Zucker</div>
                     <div class="ingredient-button">Backpulver</div>
