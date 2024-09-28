@@ -36,5 +36,5 @@ jobs:
           debug: true
           exclude: |
             /dev
-            .github/
-            .git/
+            /.github
+            /.git
