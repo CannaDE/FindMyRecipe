@@ -23,7 +23,7 @@ jobs:
           sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'finde-mein-rezept.de');/" global.php
 
       - name: Deploy to FTP server
-        uses: lukaszadamczewski/ftp-deploy-action@v1.0.0
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
           server: dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
@@ -33,4 +33,4 @@ jobs:
           port: 21
           secure: true
           passive: true  # Passiven Modus aktivieren
-          retries: 3  # Anzahl der Wiederholungsversuche bei Fehlern
+          debug: true
