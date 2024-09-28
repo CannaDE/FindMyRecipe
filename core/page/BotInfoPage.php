@@ -1,7 +1,7 @@
 <?php
 namespace fmr\page;
 
-class BotInfoPage extends AbstractPage implements IAbstractPage {
+class BotinfoPage extends AbstractPage implements IAbstractPage {
 
     public string $pageTitle = "BotInfo";
 
