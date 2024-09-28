@@ -28,9 +28,13 @@ jobs:
           server: dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: /  # oder das Verzeichnis, das Sie hochladen möchten
+          local-dir: ./core/
+          server-dir: /
           protocol: ftps
           port: 21
-          secure: true
-          passive: true  # Passiven Modus aktivieren
+          timeout: 60000
           debug: true
+          exclude: |
+            /dev
+            .github/
+            .git/
