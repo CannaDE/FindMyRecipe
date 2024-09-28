@@ -36,7 +36,7 @@ def scrap_recipe_overview(url, website, existing_recipes):
         try:
             if "artikel" in link.lower() or "article" in link.lower():
                 continue
-            if url in existing_recipes:
+            if link in existing_recipes:
                 continue
 
             response = requests.get(link, headers=header)
@@ -46,10 +46,13 @@ def scrap_recipe_overview(url, website, existing_recipes):
                 continue
 
             soup = BeautifulSoup(response.content, 'html.parser')
-            title, description, image_url = parse_recipe(soup, website)
+            title, description, image_url, ingredients = parse_recipe(soup, website)
             print(f"{GREEN}A new recipe was found {RESET}   {title}")
             
-            database.insert_recipe(title, description, website['source_id'], link, image_url)
+            recipe_id = database.insert_recipe(title, description, website['source_id'], link, image_url)
+            for ingredient in ingredients:
+                ingredient_id = database.get_or_create_ingredient(ingredient)
+                database.insert_recipe_ingredient(recipe_id, ingredient_id)
             new_recipes_count += 1
         except Exception as e:
             print(f"Error scraping {website['name']}: {e}")
@@ -94,7 +97,7 @@ def parse_html(soup, selectors):
     
     image_tag = soup.select_one(selectors['image'])
     image_url = image_tag['src'] if image_tag and 'src' in image_tag.attrs else ""
-    return title, description, image_url
+    return title, description, image_url, ingredients
 
 def parse_table(soup, selectors):
     title_tag = soup.select_one(selectors['title'])

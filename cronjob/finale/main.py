@@ -31,7 +31,6 @@ if __name__ == '__main__':
                     print(f"{CYAN}Scraping page number {RESET}{page_num} {CYAN}of {RESET}{website['pages']}")
                     scraper.scrap_recipe_overview(page_url, website, existing_recipes)
                     # recipe_id = database.insert_recipe(connection, title, description, website['source_id'], page_url, image_url)
-                    print("Ja gibt es")
             else:
                 scraper.scrap_recipe_overview(website["url"], website, existing_recipes)
                 
