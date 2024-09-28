@@ -34,7 +34,7 @@ jobs:
           server: ftp://dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./build  # oder das Verzeichnis, das du hochladen möchtest
-          server-dir: /path/on/server
+          local-dir: ./  # oder das Verzeichnis, das du hochladen möchtest
+          server-dir: /
           exclude: |
-            dev/F6pqA?CQ$rGu3j8rSb
+            dev/
