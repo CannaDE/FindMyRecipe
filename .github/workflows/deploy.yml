@@ -3,7 +3,7 @@ name: FTP Deploy
 on:
   push:
     branches:
-      - master  # oder der Branch, den du deployen möchtest
+      - master
 
 jobs:
   ftp-deploy:
@@ -20,15 +20,15 @@ jobs:
 
       - name: Update global.php
         run: |
-          sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'finde-me-rezept.de');/" global.php
+          sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'finde-mein-rezept.de');/" global.php
 
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
-          server: ftp://dev1.morvai-systems.de
+          server: dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./  # oder das Verzeichnis, das du hochladen möchtest
+          local-dir: ./
           server-dir: /
           exclude: |
             dev/
