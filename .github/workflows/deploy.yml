@@ -28,7 +28,7 @@ jobs:
           server: dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./build  # oder das Verzeichnis, das Sie hochladen möchten
+          local-dir: /  # oder das Verzeichnis, das Sie hochladen möchten
           protocol: ftps
           port: 21
           secure: true
