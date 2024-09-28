@@ -36,8 +36,8 @@ jobs:
           timeout: 60000
           debug: true
           exclude: |
-            **/.git**
-            **/.github**
-            **/dev**
-            **/cronjob/__pycache__**
-            **/cronjob/finale/__pycache__**
+            **/.git/**
+            **/.github/**
+            **/dev/**
+            **/cronjob/__pycache__/**
+            **/cronjob/finale/__pycache__/**
