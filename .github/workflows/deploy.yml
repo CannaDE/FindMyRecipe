@@ -29,7 +29,13 @@ jobs:
           echo "define('DEPLOY_BRANCH', '${GITHUB_REF##*/}');" >> global.php
           echo "define('DEPLOY_COMMIT', '${GITHUB_SHA}');" >> global.php
 
-      - name: 📂 Sync files
+      - name: ✏️ Update python settings
+        run: |
+          sed -i "s/database='rezept'/database='${{ secrets.MYSQL_DATABASENAME }}'/" cronjob/finale/database.py
+          sed -i "s/user='root'/user='${{ secrets.MYSQL_USERNAME }}'/" cronjob/finale/database.py
+          sed -i "s/password=''/password='${{ secrets.MYSQL_PASSWORD }}'/" cronjob/finale/database.py
+
+      - name: 🔁 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
           server: dev1.morvai-systems.de
@@ -42,10 +48,10 @@ jobs:
           timeout: 60000
           debug: true
           exclude: |
-            **/.git*/**
-            **/.git*
+            /.git/**
+            /.git*
             **/.github/**
             **/.github*/**
             **/dev*/**
-            **/cronjob/__pycache__/**
-            **/cronjob/finale/__pycache__/**
+            /cronjob/__pycache__/**
+            /cronjob/finale/__pycache__/**
