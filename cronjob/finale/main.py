@@ -3,6 +3,7 @@ import json
 import database
 import scraper
 import logging
+import argparse
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -11,7 +12,7 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
-if __name__ == '__main__':
+def main(save_to_db):
     start_time = time.time()
     try:
         connection = database.create_connection()
@@ -29,10 +30,10 @@ if __name__ == '__main__':
                 for page_num in range(1, website['pages'] + 1):
                     page_url = f"{website['url']}{website['page_param']}{page_num}"
                     print(f"{CYAN}Scraping page number {RESET}{page_num} {CYAN}of {RESET}{website['pages']}")
-                    scraper.scrap_recipe_overview(page_url, website, existing_recipes)
+                    scraper.scrap_recipe_overview(page_url, website, existing_recipes, save_to_db)
                     # recipe_id = database.insert_recipe(connection, title, description, website['source_id'], page_url, image_url)
             else:
-                scraper.scrap_recipe_overview(website["url"], website, existing_recipes)
+                scraper.scrap_recipe_overview(website["url"], website, existing_recipes, save_to_db)
                 
         
 
@@ -59,3 +60,10 @@ if __name__ == '__main__':
             print(f"Laufzeit des Crawlers: {int(minutes)} Minuten und {int(seconds)} Sekunden")
         else:
             print(f"Laufzeit des Crawlers: {int(seconds)} Sekunden")
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Crawler for recipe websites.")
+    parser.add_argument('--save-to-db', action='store_true', help='Save scraped data to the database')
+    args = parser.parse_args()
+
+    main(args.save_to_db)

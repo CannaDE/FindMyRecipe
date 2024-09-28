@@ -13,7 +13,7 @@ RESET = "\033[0m"
 
 
 # function to extract the recipe url from a overview site
-def scrap_recipe_overview(url, website, existing_recipes): 
+def scrap_recipe_overview(url, website, existing_recipes, save_to_db): 
     new_recipes_count = 0
     
     header = {
@@ -49,10 +49,12 @@ def scrap_recipe_overview(url, website, existing_recipes):
             title, description, image_url, ingredients = parse_recipe(soup, website)
             print(f"{GREEN}A new recipe was found {RESET}   {title}")
             
-            recipe_id = database.insert_recipe(title, description, website['source_id'], link, image_url)
-            for ingredient in ingredients:
-                ingredient_id = database.get_or_create_ingredient(ingredient)
-                database.insert_recipe_ingredient(recipe_id, ingredient_id)
+            if save_to_db:
+                recipe_id = database.insert_recipe(title, description, website['source_id'], link, image_url)
+                for ingredient in ingredients:
+                    ingredient_id = database.get_or_create_ingredient(ingredient)
+                    database.insert_recipe_ingredient(recipe_id, ingredient_id)
+                pass
             new_recipes_count += 1
         except Exception as e:
             print(f"Error scraping {website['name']}: {e}")
