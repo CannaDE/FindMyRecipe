@@ -23,18 +23,14 @@ jobs:
           sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'finde-mein-rezept.de');/" global.php
 
       - name: Deploy to FTP server
-        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        uses: lukaszadamczewski/ftp-deploy-action@v1.0.0
         with:
           server: dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /
+          local-dir: ./build  # oder das Verzeichnis, das Sie hochladen möchten
           protocol: ftps
           port: 21
-          timeout: 60000
-          passive: true
-          exclude: |
-            /dev
-            .github/
-            .git/
+          secure: true
+          passive: true  # Passiven Modus aktivieren
+          retries: 3  # Anzahl der Wiederholungsversuche bei Fehlern
