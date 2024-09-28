@@ -1,0 +1,40 @@
+name: FTP Deploy
+
+on:
+  push:
+    branches:
+      - master  # oder der Branch, den du deployen möchtest
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Update global.php
+        run: |
+          sed -i 's/define(\'DOMAIN_NAME\', \'rezept.test\');/define(\'DOMAIN_NAME\', \'finde-mein-rezept.de\');/' global.php
+
+      - name: Deploy to FTP server
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ftp://dev1.morvai-systems.de
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./build  # oder das Verzeichnis, das du hochladen möchtest
+          server-dir: /path/on/server
+          exclude: |
+            dev/F6pqA?CQ$rGu3j8rSb
