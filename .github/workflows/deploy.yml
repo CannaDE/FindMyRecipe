@@ -28,13 +28,14 @@ jobs:
           server: dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /
+          local-dir: ./cronjob/
+          server-dir: public/
           protocol: ftps
           port: 21
           timeout: 60000
           debug: true
-          exclude: |
-            /dev
-            /.github
-            /.git
+          exclude: '
+            - /dev
+            - /.github
+            - /.git
+            '
