@@ -178,6 +178,8 @@
             background-position: center;
             top: 0;
             z-index: 1;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
 
         .header-text {
