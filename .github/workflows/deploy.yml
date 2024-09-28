@@ -30,8 +30,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
           server-dir: /
-          protocol: sftp
+          protocol: ftps
           port: 21
-          secure: true
           exclude: |
             dev/
