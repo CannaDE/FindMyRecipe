@@ -19,11 +19,15 @@ jobs:
         with:
           php-version: '8.1'
 
-      - name: 🔧 Update global.php
+      - name: ✏️ Update global.php
         run: |
           sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'finde-mein-rezept.de');/" global.php
+          sed -i "s/define('MAINTENANCE_MODE', false);/define('MAINTENANCE_MODE', true);/" global.php
+          sed -i "s/define('MYSQL_USERNAME', 'root');/define('MYSQL_USERNAME', 'findemeinrezept_db1');/" global.php
+          sed -i "s/define('MYSQL_PASSWORD', '');/define('MYSQL_PASSWORD', 'GL2Lk9oaTU8mkK_gxT');/" global.php
+          sed -i "s/define('MYSQL_DATABASENAME', 'rezept');/define('MYSQL_DATABASENAME', 'findemeinrezept_db1');/" global.php
 
-      - name: 🚀 Deploy to FTP server
+      - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
           server: dev1.morvai-systems.de

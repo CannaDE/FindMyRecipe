@@ -9,8 +9,13 @@ if(!defined('LOG_DIR')) define('LOG_DIR', 'log/');
 
 define('PAGE_TITLE', 'Finde-Mein-Rezept.de');
 define('DOMAIN_NAME', 'rezept.test');
-define('MAINTENANCE_MODE', true);
+define('MAINTENANCE_MODE', false);
 define('MAINTENANCE_MESSAGE', '<p>Die Rezeptsuche wird bald verfügbar sein! Besuche uns regelmäßig, um die neuesten Updates und Funktionen zu entdecken.</p>
             <p>Wir freuen uns darauf, dir bald eine Vielzahl an Rezepten basierend auf deinen Zutaten anbieten zu können. Bleib gespannt!</p>');
+
+define('MYSQL_HOSTNAME', 'localhost');
+define('MYSQL_USERNAME', 'root');
+define('MYSQL_PASSWORD', '');
+define('MYSQL_DATABASENAME', 'rezept');
 
 new \fmr\FindMyRecipe();

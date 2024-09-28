@@ -4,14 +4,22 @@ namespace fmr;
 use fmr\system\exception\ErrorException;
 use fmr\system\exception\SystemException;
 use fmr\system\http\request\RequestHandler;
+use fmr\system\database\Database;
 
 use fmr\system\template\TemplateEngine;
 
 class FindMyRecipe {
 
+    protected static Database|string $databaseObject = '';
+
     protected static TemplateEngine $templateEngine;
     public function __construct() {
         $this->initTemplateEngine();
+        $this->initDatabase();
+    }
+
+    public function initDatabase(): void {
+        self::$databaseObject = new Database();
     }
 
     protected function initTemplateEngine(): void {
