@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - master
+      - development
 
 jobs:
-  ftp-deploy:
+  ftp-deploy-master:
+    if: github.ref == 'refs/heads/master'
     name: 🎉 Deploy to FTP
     runs-on: ubuntu-latest
 
@@ -45,13 +47,64 @@ jobs:
           server-dir: /
           protocol: ftps
           port: 21
-          timeout: 60000
-          debug: true
           exclude: |
             **/.git*
             **/.git*/**
             **/.github/**
             **/.github*/**
+            **/dev*
             **/dev*/**
             **/cronjob/__pycache__/**
             **/cronjob/finale/__pycache__/**
+
+  ftp-deploy-development:
+    if: github.ref == 'refs/heads/development'
+    name: 🎉 Deploy to Development FTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚚 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: ✏️ Update global.php
+        run: |
+          sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'dev.finde-mein-rezept.de');/" global.php
+          sed -i "s/define('MAINTENANCE_MODE', false);/define('MAINTENANCE_MODE', false);/" global.php
+          sed -i "s/define('MYSQL_USERNAME', 'root');/define('MYSQL_USERNAME', '${{ secrets.MYSQL_USERNAME }}');/" global.php
+          sed -i "s/define('MYSQL_PASSWORD', '');/define('MYSQL_PASSWORD', '${{ secrets.MYSQL_PASSWORD }}');/" global.php
+          sed -i "s/define('MYSQL_DATABASENAME', 'rezept');/define('MYSQL_DATABASENAME', '${{ secrets.MYSQL_DATABASENAME }}');/" global.php
+          echo "define('DEPLOY_BRANCH', '${GITHUB_REF##*/}');" >> global.php
+          echo "define('DEPLOY_COMMIT', '${GITHUB_SHA}');" >> global.php
+
+      - name: ✏️ Update python settings
+        run: |
+          sed -i "s/database='rezept'/database='${{ secrets.MYSQL_DATABASENAME }}'/" cronjob/finale/database.py
+          sed -i "s/user='root'/user='${{ secrets.MYSQL_USERNAME }}'/" cronjob/finale/database.py
+          sed -i "s/password=''/password='${{ secrets.MYSQL_PASSWORD }}'/" cronjob/finale/database.py
+
+      - name: 🔁 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: dev1.morvai-systems.de
+          username: ${{ secrets.FTP_DEV_USERNAME }}
+          password: ${{ secrets.FTP_DEV_PASSWORD }}
+          local-dir: ./
+          server-dir: /
+          protocol: ftps
+          port: 21
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/.github*/**
+            **/dev*
+            **/dev*/**
+            **/cronjob/__pycache__/**
+            **/cronjob/finale/__pycache__/**
+
+
