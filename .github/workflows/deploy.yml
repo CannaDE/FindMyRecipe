@@ -45,13 +45,12 @@ jobs:
           server-dir: /
           protocol: ftps
           port: 21
-          timeout: 60000
-          debug: true
           exclude: |
-            /.git/**
-            /.git*
+            **/.git*
+            **/.git*/**
             **/.github/**
             **/.github*/**
+            **/dev*
             **/dev*/**
-            /cronjob/__pycache__/**
-            /cronjob/finale/__pycache__/**
+            **/cronjob/__pycache__/**
+            **/cronjob/finale/__pycache__/**
