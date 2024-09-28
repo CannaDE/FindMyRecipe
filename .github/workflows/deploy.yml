@@ -23,9 +23,9 @@ jobs:
         run: |
           sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'finde-mein-rezept.de');/" global.php
           sed -i "s/define('MAINTENANCE_MODE', false);/define('MAINTENANCE_MODE', true);/" global.php
-          sed -i "s/define('MYSQL_USERNAME', 'root');/define('MYSQL_USERNAME', 'findemeinrezept_db1');/" global.php
-          sed -i "s/define('MYSQL_PASSWORD', '');/define('MYSQL_PASSWORD', 'GL2Lk9oaTU8mkK_gxT');/" global.php
-          sed -i "s/define('MYSQL_DATABASENAME', 'rezept');/define('MYSQL_DATABASENAME', 'findemeinrezept_db1');/" global.php
+          sed -i "s/define('MYSQL_USERNAME', 'root');/define('MYSQL_USERNAME', '${{ secrets.MYSQL_USERNAME }}');/" global.php
+          sed -i "s/define('MYSQL_PASSWORD', '');/define('MYSQL_PASSWORD', '${{ secrets.MYSQL_PASSWORD }}');/" global.php
+          sed -i "s/define('MYSQL_DATABASENAME', 'rezept');/define('MYSQL_DATABASENAME', '${{ secrets.MYSQL_DATABASENAME }}');/" global.php
           echo "define('DEPLOY_BRANCH', '${GITHUB_REF##*/}');" >> global.php
           echo "define('DEPLOY_COMMIT', '${GITHUB_SHA}');" >> global.php
 
