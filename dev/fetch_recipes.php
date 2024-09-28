@@ -16,7 +16,8 @@ $ingredients = isset($_GET['ingredients']) ? json_decode($_GET['ingredients'], t
 
 // Prüfen, ob Zutaten vorhanden sind
 if (empty($ingredients)) {
-    echo "<p>Keine Zutaten ausgewählt.</p>";
+    $response = ['recipes' => null, 'status' => 'success'];
+    echo json_encode($response);
     exit;
 }
 
@@ -30,7 +31,7 @@ $sql = "
     JOIN ingredients i ON ri.ingredient_id = i.id 
     WHERE i.name LIKE '%salz%' 
     OR i.name LIKE '%pfeffer%' 
-    OR i.name IN ($placeholders)
+    AND i.name IN ($placeholders)
     GROUP BY r.id 
     HAVING COUNT(DISTINCT i.name) = ?";
 
@@ -43,21 +44,21 @@ $ingredient_count = count($ingredients);
 $stmt->execute(array_merge($ingredients, [$ingredient_count]));
 $result = $stmt->get_result();
 
-
+$response = [];
 if ($result->num_rows > 0) {
-    echo '<h2>Du kannst '.$result->num_rows.' Rezpte zubereiten';
     while ($row = $result->fetch_assoc()) { 
-        echo '<div class="card resultRecipes">';
-        echo '<img class="recipeImg" src='.htmlspecialchars($row['image_url']).' alt="" title="'.htmlspecialchars($row['title']).'" />';
-        echo '<h3>'.htmlspecialchars($row["title"]).'</h3>';
-        echo '<p class="source">'.preg_replace('/https?:\/\//', '', $row['source_url']).'</p>';
-        echo '<p>'.(($row['description']) ? htmlspecialchars($row["description"]) : "").'</p>';
-        echo '<a href='.htmlspecialchars($row['url']).'>Zum Rezept</a>';
-        echo '<div style="clear: both;"></div></div>';
+        $json = [
+            'title' => $row['title'],
+            'description' => $row['description'],
+            'image_url' => $row['image_url'],
+            'source_url' => $row['source_url'],
+            'url' => htmlspecialchars($row['url'])
+        ];
+        array_push($response, $json);
     }
-} else {
-    echo "<p class=\"alert error\">Keine Rezepte gefunden für die ausgewählten Zutaten.</p>";
 }
+$response = ['recipes' => $response, 'status' => 'success'];
+echo json_encode($response);
 
 $stmt->close();
 $conn->close();
