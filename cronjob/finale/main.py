@@ -15,12 +15,11 @@ if __name__ == '__main__':
     start_time = time.time()
     try:
         connection = database.create_connection()
-        
         # Loading the website config urls.json
         with open("urls.json", 'r') as file:
             website_configs = json.load(file)
     
-        existing_recipes = database.get_existing_recipes(connection)
+        existing_recipes = database.get_existing_recipes()
         print(f"{RESET}{len(existing_recipes)} {GREEN} recipes have been loaded from the database..")
 
         for website in website_configs['websites']:
@@ -47,7 +46,6 @@ if __name__ == '__main__':
             connection.close()
             print(f"{RED}MySQL database connection has closed!")
 
-        print(f"{new_recipes_count} {GREEN}neue {RESET}Rezepte gespeichert.")
 
         end_time = time.time()
         elapsed_time = end_time - start_time

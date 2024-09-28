@@ -11,9 +11,11 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
+
 # function to extract the recipe url from a overview site
 def scrap_recipe_overview(url, website, existing_recipes): 
     new_recipes_count = 0
+    
     header = {
         'User-Agent': "FindMyRecipeBot/1.0 (+https://finde-mein-rezept.de/botinfo)"
     }
@@ -47,6 +49,7 @@ def scrap_recipe_overview(url, website, existing_recipes):
             title, description, image_url = parse_recipe(soup, website)
             print(f"{GREEN}A new recipe was found {RESET}   {title}")
             
+            database.insert_recipe(title, description, website['source_id'], link, image_url)
             new_recipes_count += 1
         except Exception as e:
             print(f"Error scraping {website['name']}: {e}")
