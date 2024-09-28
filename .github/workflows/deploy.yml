@@ -7,37 +7,37 @@ on:
 
 jobs:
   ftp-deploy:
+    name: 🎉 Deploy to FTP
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: 🚚 Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up PHP
+      - name: 🔧 Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
 
-      - name: Update global.php
+      - name: 🔧 Update global.php
         run: |
           sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'finde-mein-rezept.de');/" global.php
 
-      - name: Deploy to FTP server
+      - name: 🚀 Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
           server: dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./cronjob/
-          server-dir: public/
+          local-dir: ./
+          server-dir: /
           protocol: ftps
           port: 21
           timeout: 60000
           debug: true
-          exclude: '
-            - /dev
-            - /.github
-            - /.git
-            - /cronjob/__pycache__/**
-            - /cronjob/finale/__pycache__/**
-            '
+          exclude: |
+            **/.git**
+            **/.github**
+            **/dev**
+            **/cronjob/__pycache__**
+            **/cronjob/finale/__pycache__**
