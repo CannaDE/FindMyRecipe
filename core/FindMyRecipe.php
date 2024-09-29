@@ -142,11 +142,17 @@ class FindMyRecipe {
         }
     }
 
+
+
     public static function handle($severity, $errstr, $errfile, $errline): void {
         if (!(error_reporting() & $severity)) {
             return;
         }
        throw new ErrorException($errstr, $severity, $errfile, $errline);
+    }
+
+    final public static function getDB(): Database {
+        return self::$databaseObject;
     }
 
     final public static function getTpl(): TemplateEngine {
