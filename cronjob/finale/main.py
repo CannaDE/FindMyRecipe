@@ -16,7 +16,7 @@ CYAN = "\033[36m"
 RESET = "\033[0m"
 
 
-def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit):
+def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ignore_existing):
     start_time = time.time()
     try:
         if debug:
@@ -43,7 +43,7 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit):
         with open("urls.json", 'r') as file:
             website_configs = json.load(file)
     
-        if not debug:
+        if not debug and not ignore_existing:
             existing_recipes = database.get_existing_recipes()
             print(f"{RESET}{len(existing_recipes)} {GREEN} recipes have been loaded from the database..")
         else:
@@ -115,9 +115,10 @@ if __name__ == '__main__':
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('--rate-limit', type=int, help='Limit the number of requests per second')
     parser.add_argument('--website', type=str, help='Specify a website to scrape')
+    parser.add_argument('--ignore-existing', action='store_true', help='Ignore existing recipes')
     parser.add_argument('--save-to-file', action='store_true', help='Save debug results to a file')
     parser.add_argument('--timeout', type=int, default=10, help='Timeout for HTTP requests in seconds')
     parser.add_argument('--user-agent', type=str, default="FindMyRecipeBot/1.0 (+https://finde-mein-rezept.de/botinfo)", help='Set a custom User-Agent header')
     args = parser.parse_args()
 
-    main(args.debug, args.website, args.save_to_file, args.user_agent, args.timeout, args.rate_limit)
+    main(args.debug, args.website, args.save_to_file, args.user_agent, args.timeout, args.rate_limit, args.ignore_existing)
