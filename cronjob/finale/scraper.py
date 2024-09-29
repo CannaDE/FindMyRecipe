@@ -11,10 +11,10 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
-
+new_recipes_count = 0
 # function to extract the recipe url from a overview site
-def scrap_recipe_overview(url, website, existing_recipes, save_to_db): 
-    new_recipes_count = 0
+def scrap_recipe_overview(url, website, existing_recipes, debug): 
+    global new_recipes_count
     
     header = {
         'User-Agent': "FindMyRecipeBot/1.0 (+https://finde-mein-rezept.de/botinfo)"
@@ -49,18 +49,24 @@ def scrap_recipe_overview(url, website, existing_recipes, save_to_db):
             title, description, image_url, ingredients = parse_recipe(soup, website)
             print(f"{GREEN}A new recipe was found {RESET}   {title}")
             
-            if save_to_db:
+            if not debug:
                 recipe_id = database.insert_recipe(title, description, website['source_id'], link, image_url)
                 for ingredient in ingredients:
                     ingredient_id = database.get_or_create_ingredient(ingredient)
                     database.insert_recipe_ingredient(recipe_id, ingredient_id)
                 pass
+            else:
+                print(f"{GREEN}Title: {title}")
+                print(f"{GREEN}Description: {description}")
+                print(f"{GREEN}Image URL: {image_url}")
+                print(f"{GREEN}Ingredients: {ingredients}")
             new_recipes_count += 1
         except Exception as e:
             print(f"Error scraping {website['name']}: {e}")
+
+# Funktion, um die bestehende Verbindung zu erhalten
+def get_new_recipes_count():
     return new_recipes_count
-
-
 
 def parse_recipe(soup, config):
     type_mapping = {
