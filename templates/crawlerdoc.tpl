@@ -113,14 +113,13 @@
 
         <!-- Inhaltsbereich -->
         <div class="content">
-            <h1>Dokumentation des Rezept-Crawlers</h1>
             <p>
                 Diese Dokumentation beschreibt die Funktionsweise und Verwendung unseres Rezept-Crawlers. Der Crawler durchsucht das Web nach öffentlich zugänglichen Rezepten und speichert wesentliche Informationen in unserer Datenbank.
             </p>
 
             <h2>Installation</h2>
             <p>
-                Um den Crawler zu verwenden, müssen Sie sicherstellen, dass alle erforderlichen Python-Pakete installiert sind. Sie können die Pakete mit folgendem Befehl installieren:
+                Um den Crawler zu verwenden, musst du sicherstellen, dass alle erforderlichen Python-Pakete installiert sind. Du kannst die Pakete mit folgendem Befehl installieren:
             </p>
             <div class="info-box">
                 <code>pip install -r requirements.txt</code>
@@ -131,26 +130,52 @@
                 Der Crawler benötigt die folgenden Python-Pakete:
             </p>
             <ul>
-                <li>requests</li>
-                <li>beautifulsoup4</li>
-                <li>mysql-connector-python</li>
-                <li>colorama</li>
-                <li>argparse</li>
-                <li>logging</li>
+                <li><strong>requests:</strong> Ermöglicht das Senden von HTTP-Anfragen und das Empfangen von Antworten</li>
+                <li><strong>beautifulsoup4:</strong> Dient zum Parsen und Extrahieren von Daten aus HTML- und XML-Dateien</li>
+                <li><strong>mysql-connector-python:</strong> Stellt eine Verbindung zur MySQL-Datenbank her und ermöglicht Datenbankoperationen</li>
+                <li><strong>colorama:</strong> Fügt Farbunterstützung für Terminalausgaben hinzu</li>
+                <li><strong>argparse:</strong> Erleichtert das Parsen von Kommandozeilenargumenten</li>
+                <li><strong>logging:</strong> Bietet ein flexibles Framework für das Generieren von Protokollnachrichten</li>
             </ul>
             <p>
-                Stellen Sie sicher, dass diese Pakete in Ihrer <code>requirements.txt</code> Datei aufgeführt sind.
+                Stelle sicher, dass diese Pakete in deiner <code>requirements.txt</code> Datei aufgeführt sind.
             </p>
 
             <h2>Voraussetzungen</h2>
             <p>
-                Bevor Sie den Crawler ausführen, stellen Sie sicher, dass die folgenden Voraussetzungen erfüllt sind:
+                Bevor du den Crawler ausführst, stelle sicher, dass die folgenden Voraussetzungen erfüllt sind:
             </p>
             <ul>
                 <li>Python 3.6 oder höher</li>
                 <li>Eine MySQL-Datenbank mit den erforderlichen Tabellen</li>
                 <li>Eine <code>urls.json</code> Datei mit den Konfigurationsdetails der zu scrapenden Websites</li>
             </ul>
+
+            <h2>Konfiguration</h2>
+            <p>
+                Die Konfiguration der zu scrapenden Websites erfolgt über die Datei <code>urls.json</code>. Diese Datei enthält eine Liste von Websites und deren spezifischen Selektoren für die verschiedenen Elemente eines Rezepts (Titel, Zutaten, Beschreibung, Bild).
+            </p>
+            <pre>
+{
+    "websites": [
+        {
+            "name": "example.com",
+            "url": "https://www.example.com/recipes",
+            "page_param": "?page=",
+            "pages": 5,
+            "selectors": {
+                "recipe": ".recipe-link",
+                "title": ".recipe-title",
+                "ingredients": ".recipe-ingredients li",
+                "description": ".recipe-description",
+                "image": ".recipe-image img"
+            },
+            "type": "html",
+            "source_id": 1
+        }
+    ]
+}</pre>
+
 
             <h2>Verwendung</h2>
             <p>
@@ -208,47 +233,16 @@
                 Dieses Modul enthält die Logik zum Senden von Benachrichtigungen über Telegram. Die Funktion <code>send_telegram_notifications()</code> sendet eine Nachricht an eine vordefinierte Liste von Telegram-Chat-IDs.
             </p>
 
-            <h2>Konfiguration</h2>
-            <p>
-                Die Konfiguration der zu scrapenden Websites erfolgt über die Datei <code>urls.json</code>. Diese Datei enthält eine Liste von Websites und deren spezifischen Selektoren für die verschiedenen Elemente eines Rezepts (Titel, Zutaten, Beschreibung, Bild).
-            </p>
-            <pre>
-{
-    "websites": [
-        {
-            "name": "example.com",
-            "url": "https://www.example.com/recipes",
-            "page_param": "?page=",
-            "pages": 5,
-            "selectors": {
-                "recipe": ".recipe-link",
-                "title": ".recipe-title",
-                "ingredients": ".recipe-ingredients li",
-                "description": ".recipe-description",
-                "image": ".recipe-image img"
-            },
-            "type": "html",
-            "source_id": 1
-        }
-    ]
-}
-            </pre>
-
+            
             <h2>Fehlerbehebung</h2>
             <p>
-                Falls Sie auf Probleme stoßen, überprüfen Sie bitte die folgenden Punkte:
+                Falls du auf Probleme stößt, überprüfe bitte die folgenden Punkte:
             </p>
             <ul>
-                <li>Stellen Sie sicher, dass alle erforderlichen Pakete installiert sind.</li>
-                <li>Überprüfen Sie die Konfiguration in der <code>urls.json</code>-Datei.</li>
-                <li>Überprüfen Sie die Logs auf Fehlermeldungen und stack traces.</li>
+                <li>Stelle sicher, dass alle erforderlichen Pakete installiert sind.</li>
+                <li>Überprüfe die Konfiguration in der <code>urls.json</code>-Datei.</li>
+                <li>Überprüfe die Logs auf Fehlermeldungen und stack traces.</li>
             </ul>
-
-            <h2>Kontakt</h2>
-            <p>
-                Falls Sie Fragen oder Feedback haben, zögern Sie nicht, uns zu kontaktieren. Wir sind immer daran interessiert, unseren Service zu verbessern.
-                <br/>E-Mailadresse: <a href="mailto:kontakt@finde-dein-rezept.de">kontakt@finde-dein-rezept.de</a>
-            </p>
             <footer>
                 &copy; 2024 Finde-Mein-Rezept.de
             </footer>
