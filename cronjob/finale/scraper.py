@@ -13,13 +13,13 @@ RESET = "\033[0m"
 
 new_recipes_count = 0
 # function to extract the recipe url from a overview site
-def scrap_recipe_overview(url, website, existing_recipes, debug, save_to_file): 
+def scrap_recipe_overview(url, website, existing_recipes, debug, save_to_file, user_agent, timeout): 
     global new_recipes_count
     
     header = {
-        'User-Agent': "FindMyRecipeBot/1.0 (+https://finde-mein-rezept.de/botinfo)"
+        'User-Agent': user_agent
     }
-    response = requests.get(url, headers=header)
+    response = requests.get(url, headers=header, timeout=timeout)
 
     if response.status_code != 200:
         logging.error(f"{RED} Error when calling up the overview page. [{response.status_code}]")

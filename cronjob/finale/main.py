@@ -13,7 +13,7 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
-def main(debug, website_name, save_to_file):
+def main(debug, website_name, save_to_file, user_agent, timeout):
     start_time = time.time()
     try:
         if debug:
@@ -55,9 +55,9 @@ def main(debug, website_name, save_to_file):
                 for page_num in range(1, website['pages'] + 1):
                     page_url = f"{website['url']}{website['page_param']}{page_num}"
                     print(f"{CYAN}Scraping page number {RESET}{page_num} {CYAN}of {RESET}{website['pages']}")
-                    scraper.scrap_recipe_overview(page_url, website, existing_recipes, debug, save_to_file)
+                    scraper.scrap_recipe_overview(page_url, website, existing_recipes, debug, save_to_file, user_agent, timeout)
             else:
-                scraper.scrap_recipe_overview(website["url"], website, existing_recipes, debug, save_to_file)
+                scraper.scrap_recipe_overview(website["url"], website, existing_recipes, debug, save_to_file, user_agent, timeout)
                 
     except KeyboardInterrupt:
         print(f"{RED}Execution was terminated by user..{RESET}")
@@ -86,6 +86,8 @@ if __name__ == '__main__':
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('--website', type=str, help='Specify a website to scrape')
     parser.add_argument('--save-to-file', action='store_true', help='Save debug results to a file')
+    parser.add_argument('--timeout', type=int, default=10, help='Timeout for HTTP requests in seconds')
+    parser.add_argument('--user-agent', type=str, default="FindMyRecipeBot/1.0 (+https://finde-mein-rezept.de/botinfo)", help='Set a custom User-Agent header')
     args = parser.parse_args()
 
-    main(args.debug, args.website, args.save_to_file)
+    main(args.debug, args.website, args.save_to_file, args.user_agent, args.timeout)
