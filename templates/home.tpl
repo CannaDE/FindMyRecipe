@@ -303,7 +303,9 @@
         }
 
         .basic-ingredients {
-            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            border: 1px solid #f5f5f5;
         }
 
         .basic-ingredients h2 {
@@ -312,6 +314,9 @@
             color: #333;
             display: flex;
             align-items: center;
+            padding-left: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #cfcfcf;
         }
 
         .basic-ingredients h2::before {
@@ -350,9 +355,12 @@
 
 
         .basic-ingredients {
-        margin-bottom: 20px;
-        
-    }
+            margin-bottom: 20px;
+        }
+
+        .ingredient-list {
+            padding: 10px;
+        }
 
     .showMoreBtn {
         padding: 10px 15px;
@@ -368,7 +376,7 @@
 
     .showMoreBtn:hover {
         background-color: #218838;   
-   
+    }
     </style>
 </head>
 <body>
