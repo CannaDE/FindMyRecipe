@@ -6,6 +6,7 @@ import logging
 import argparse
 import requests
 import os
+import notification
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -14,8 +15,6 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
-TELEGRAM_TOKEN = "8055605849:AAFoZIFir5qT5i-934FzIKy06aL8G3S2xpI"
-TELEGRAM_CHAT_IDS = ["215730917"]
 
 def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit):
     start_time = time.time()
@@ -38,6 +37,7 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit):
             print(f"{YELLOW}> Crawler is now processing. This might take a while.{RESET}")
             print(f"{YELLOW}> Duration depends on the number of pages to analyze.{RESET}")
             print(f"{GREEN}> Let's discover some culinary treasures! 🥘🔍{RESET}\n")
+            
         connection = database.create_connection()
         # Loading the website config urls.json
         with open("urls.json", 'r') as file:
@@ -74,9 +74,20 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit):
                 scraper.scrap_recipe_overview(website["url"], website, existing_recipes, debug, save_to_file, user_agent, timeout)
                 if rate_limit:
                     time.sleep(rate_limit_interval)
+                    
+        neue_rezepte = scraper.get_new_recipes_count()
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        message = notification.buildCrawlerSuccessMessage(neue_rezepte, elapsed_time)
+        notification.send_telegram_notifications(message)
                 
     except KeyboardInterrupt:
         print(f"{RED}Execution was terminated by user..{RESET}")
+        new_recipes = scraper.get_new_recipes_count()
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        message = notification.buildCrawlerUserExitedMessage(new_recipes, elapsed_time)
+        notification.send_telegram_notifications(message)
 
     finally:
         if connection.is_connected():
@@ -97,35 +108,7 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit):
         else:
             print(f"Runtime of the crawler: {int(seconds)} seconds")
 
-        if not debug:
-            send_telegram_notifications(new_recipes, elapsed_time)
 
-def send_telegram_notifications(new_recipes, elapsed_time):
-    hours, rem = divmod(elapsed_time, 3600)
-    minutes, seconds = divmod(rem, 60)
-    runtime = f"{int(hours)} hours, {int(minutes)} minutes & {int(seconds)} seconds" if hours > 0 else f"{int(minutes)} minutes and {int(seconds)} seconds" if minutes > 0 else f"{int(seconds)} seconds"
-    
-    message = f"""
-    The crawler has completed its execution.
-    
-    Number of new recipes found: {new_recipes}
-    Total runtime: {runtime}
-    """
-    
-    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    
-    for chat_id in TELEGRAM_CHAT_IDS:
-        payload = {
-            'chat_id': chat_id,
-            'text': message
-        }
-        
-        try:
-            response = requests.post(url, data=payload)
-            if response.status_code != 200:
-                print(f"{RED}Failed to send Telegram notification to chat ID {chat_id}: {response.text}{RESET}")
-        except Exception as e:
-            print(f"{RED}Failed to send Telegram notification to chat ID {chat_id}: {e}{RESET}")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Crawler for recipe websites.")
