@@ -55,10 +55,9 @@ def scrap_recipe_overview(url, website, existing_recipes, debug, save_to_file, u
                     ingredient_id = database.get_or_create_ingredient(ingredient)
                     database.insert_recipe_ingredient(recipe_id, ingredient_id)
             else:
-                print(f"{GREEN}Title: {title}")
-                print(f"{GREEN}Description: {description}")
-                print(f"{GREEN}Image URL: {image_url}")
-                print(f"{GREEN}Ingredients: {ingredients}")
+                print(f"{GREEN}Description: {RESET}{description}")
+                print(f"{GREEN}Image URL: {RESET}{image_url}")
+                print(f"{GREEN}Ingredients: {RESET}{ingredients}")
                 if save_to_file:
                     with open("debug.txt", 'a') as f:
                         f.write(f"Title: {title}\n")

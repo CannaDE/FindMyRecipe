@@ -4,7 +4,8 @@ import database
 import scraper
 import logging
 import argparse
-import sys
+import requests
+import os
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -13,7 +14,10 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
-def main(debug, website_name, save_to_file, user_agent, timeout):
+TELEGRAM_TOKEN = "8055605849:AAFoZIFir5qT5i-934FzIKy06aL8G3S2xpI"
+TELEGRAM_CHAT_IDS = ["215730917"]
+
+def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit):
     start_time = time.time()
     try:
         if debug:
@@ -28,7 +32,12 @@ def main(debug, website_name, save_to_file, user_agent, timeout):
             print(f"║                                                                   ║")
             print(f"║ {GREEN}Happy testing and debugging! 🕵️‍♂️🔍{RED}                                ║")
             print(f"╚═══════════════════════════════════════════════════════════════════╝{RESET}")
-        
+        else:
+            print(f"\n{CYAN}* * * Recipe Crawler Launching * * *{RESET}")
+            print(f"{GREEN}> Starting the hunt for tasty new recipes{RESET}")
+            print(f"{YELLOW}> Crawler is now processing. This might take a while.{RESET}")
+            print(f"{YELLOW}> Duration depends on the number of pages to analyze.{RESET}")
+            print(f"{GREEN}> Let's discover some culinary treasures! 🥘🔍{RESET}\n")
         connection = database.create_connection()
         # Loading the website config urls.json
         with open("urls.json", 'r') as file:
@@ -48,6 +57,9 @@ def main(debug, website_name, save_to_file, user_agent, timeout):
                 print(f"{RED}No website found with the name {website_name}{RESET}")
                 return
 
+        if rate_limit:
+            rate_limit_interval = 1.0 / rate_limit
+        
         for website in websites_to_scrape:
             print(f"{CYAN}Scraping the following page {RESET}{website['url']}")
 
@@ -56,8 +68,12 @@ def main(debug, website_name, save_to_file, user_agent, timeout):
                     page_url = f"{website['url']}{website['page_param']}{page_num}"
                     print(f"{CYAN}Scraping page number {RESET}{page_num} {CYAN}of {RESET}{website['pages']}")
                     scraper.scrap_recipe_overview(page_url, website, existing_recipes, debug, save_to_file, user_agent, timeout)
+                    if rate_limit:
+                        time.sleep(rate_limit_interval)
             else:
                 scraper.scrap_recipe_overview(website["url"], website, existing_recipes, debug, save_to_file, user_agent, timeout)
+                if rate_limit:
+                    time.sleep(rate_limit_interval)
                 
     except KeyboardInterrupt:
         print(f"{RED}Execution was terminated by user..{RESET}")
@@ -81,13 +97,44 @@ def main(debug, website_name, save_to_file, user_agent, timeout):
         else:
             print(f"Runtime of the crawler: {int(seconds)} seconds")
 
+        if not debug:
+            send_telegram_notifications(new_recipes, elapsed_time)
+
+def send_telegram_notifications(new_recipes, elapsed_time):
+    hours, rem = divmod(elapsed_time, 3600)
+    minutes, seconds = divmod(rem, 60)
+    runtime = f"{int(hours)} hours, {int(minutes)} minutes & {int(seconds)} seconds" if hours > 0 else f"{int(minutes)} minutes and {int(seconds)} seconds" if minutes > 0 else f"{int(seconds)} seconds"
+    
+    message = f"""
+    The crawler has completed its execution.
+    
+    Number of new recipes found: {new_recipes}
+    Total runtime: {runtime}
+    """
+    
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+    
+    for chat_id in TELEGRAM_CHAT_IDS:
+        payload = {
+            'chat_id': chat_id,
+            'text': message
+        }
+        
+        try:
+            response = requests.post(url, data=payload)
+            if response.status_code != 200:
+                print(f"{RED}Failed to send Telegram notification to chat ID {chat_id}: {response.text}{RESET}")
+        except Exception as e:
+            print(f"{RED}Failed to send Telegram notification to chat ID {chat_id}: {e}{RESET}")
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Crawler for recipe websites.")
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    parser.add_argument('--rate-limit', type=int, help='Limit the number of requests per second')
     parser.add_argument('--website', type=str, help='Specify a website to scrape')
     parser.add_argument('--save-to-file', action='store_true', help='Save debug results to a file')
     parser.add_argument('--timeout', type=int, default=10, help='Timeout for HTTP requests in seconds')
     parser.add_argument('--user-agent', type=str, default="FindMyRecipeBot/1.0 (+https://finde-mein-rezept.de/botinfo)", help='Set a custom User-Agent header')
     args = parser.parse_args()
 
-    main(args.debug, args.website, args.save_to_file, args.user_agent, args.timeout)
+    main(args.debug, args.website, args.save_to_file, args.user_agent, args.timeout, args.rate_limit)
