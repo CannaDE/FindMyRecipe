@@ -346,7 +346,29 @@
             border-left: 4px solid #4BB5C1;
             margin-bottom: 10px;
             margin-top: 20px;
-        }        
+        }
+
+
+        .basic-ingredients {
+        margin-bottom: 20px;
+        
+    }
+
+    .showMoreBtn {
+        padding: 10px 15px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+        display: inline-block;
+    }
+
+    .showMoreBtn:hover {
+        background-color: #218838;   
+   
     </style>
 </head>
 <body>
@@ -365,125 +387,294 @@
 
                 <div id="selectedIngredients"></div>
                 <div class="basic-ingredients">
-                    <h2>🥔 Grundzutaten</h2>
-                    <div class="ingredient-button">Kartoffeln</div>
-                    <div class="ingredient-button">Karotten</div>
-                    <div class="ingredient-button">Zwiebeln</div>
-                    <div class="ingredient-button"">Knoblauch</div>
-                    <div class="ingredient-button">Tomaten</div>
-                    <div class="ingredient-button">Paprika</div>
-                    <div class="ingredient-button">Gurken</div>
-                    <div class="ingredient-button">Brokkoli</div>
-                    <div class="ingredient-button">Blumenkohl</div>
-                    <div class="ingredient-button">Spinat</div>
-                    <div class="ingredient-button">Zucchini</div>
-                    <div class="ingredient-button">Kürbis</div>
-                    <div class="ingredient-button">Sellerie</div>
-                    <div class="ingredient-button">Lauch</div>
+                    <h2 data-emoji="🥔"> Grundzutaten</h2>
+                    <div class="ingredient-list" id="basicIngredientsList1">
+                        <div class="ingredient-button">Kartoffeln</div>
+                        <div class="ingredient-button">Karotten</div>
+                        <div class="ingredient-button">Zwiebeln</div>
+                        <div class="ingredient-button">Knoblauch</div>
+                        <div class="ingredient-button">Tomaten</div>
+                        <div class="ingredient-button">Paprika</div>
+                        <div class="ingredient-button">Gurken</div>
+                        <div class="ingredient-button">Brokkoli</div>
+                        <div class="ingredient-button">Blumenkohl</div>
+                        <div class="ingredient-button">Spinat</div>
+                        <div class="ingredient-button">Zucchini</div>
+                        <div class="ingredient-button">Kürbis</div>
+                        <div class="ingredient-button">Sellerie</div>
+                        <div class="ingredient-button">Lauch</div>
+                        <div class="ingredient-button">Aubergine</div>
+                        <div class="ingredient-button">Champignons</div>
+                        <div class="ingredient-button">Erbsen</div>
+                        <div class="ingredient-button">Bohnen</div>
+                        <div class="ingredient-button">Mais</div>
+                        <div class="ingredient-button">Süßkartoffeln</div>
+                        <div class="ingredient-button">Rote Beete</div>
+                        <div class="ingredient-button">Spargel</div>
+                        <div class="ingredient-button">Rosenkohl</div>
+                        <div class="ingredient-button">Kohlrabi</div>
+                        <div class="ingredient-button">Fenchel</div>
+                        <div class="ingredient-button">Radieschen</div>
+                        <div class="ingredient-button">Rucola</div>
+                        <div class="ingredient-button">Mangold</div>
+                        <button class="showMoreBtn" onclick="toggleIngredients('basicIngredientsList1', this)">mehr</button>
+                    </div>
+                    
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🍎 Obst</h2>
-                    <div class="ingredient-button">Äpfel</div>
-                    <div class="ingredient-button">Bananen</div>
-                    <div class="ingredient-button">Orangen</div>
-                    <div class="ingredient-button">Zitronen</div>
-                    <div class="ingredient-button">Erdbeeren</div>
-                    <div class="ingredient-button">Himbeeren</div>
-                    <div class="ingredient-button">Blaubeeren</div>
-                    <div class="ingredient-button">Kirschen</div>
-                    <div class="ingredient-button">Trauben</div>
-                    <div class="ingredient-button">Pfirsiche</div>
-                    <div class="ingredient-button">Birnen</div>
-                    <div class="ingredient-button">Ananas</div>
-                    <div class="ingredient-button">Mangos</div>
-                    <div class="ingredient-button">Melonen</div>
+                    <h2 data-emoji="🍎"> Obst</h2>
+                    <div class="ingredient-list" id="basicIngredientsList2">
+                        <div class="ingredient-button">Äpfel</div>
+                        <div class="ingredient-button">Bananen</div>
+                        <div class="ingredient-button">Orangen</div>
+                        <div class="ingredient-button">Zitronen</div>
+                        <div class="ingredient-button">Erdbeeren</div>
+                        <div class="ingredient-button">Himbeeren</div>
+                        <div class="ingredient-button">Blaubeeren</div>
+                        <div class="ingredient-button">Kirschen</div>
+                        <div class="ingredient-button">Trauben</div>
+                        <div class="ingredient-button">Pfirsiche</div>
+                        <div class="ingredient-button">Birnen</div>
+                        <div class="ingredient-button">Ananas</div>
+                        <div class="ingredient-button">Mangos</div>
+                        <div class="ingredient-button">Melonen</div>
+                        <div class="ingredient-button">Kiwis</div>
+                        <div class="ingredient-button">Pflaumen</div>
+                        <div class="ingredient-button">Aprikosen</div>
+                        <div class="ingredient-button">Granatäpfel</div>
+                        <div class="ingredient-button">Feigen</div>
+                        <div class="ingredient-button">Papaya</div>
+                        <div class="ingredient-button">Maracuja</div>
+                        <div class="ingredient-button">Litschi</div>
+                        <div class="ingredient-button">Guave</div>
+                        <div class="ingredient-button">Johannisbeeren</div>
+                        <div class="ingredient-button">Stachelbeeren</div>
+                        <div class="ingredient-button">Brombeeren</div>
+                        <button class="showMoreBtn" onclick="toggleIngredients('basicIngredientsList2', this)">mehr</button>
+                    </div>
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🥛 Milchprodukte</h2>
-                    <div class="ingredient-button">Milch</div>
-                    <div class="ingredient-button">Butter</div>
-                    <div class="ingredient-button">Käse</div>
-                    <div class="ingredient-button">Joghurt</div>
-                    <div class="ingredient-button">Sahne</div>
-                    <div class="ingredient-button">Quark</div>
-                    <div class="ingredient-button">Buttermilch</div>
-                    <div class="ingredient-button">Crème fraiche</div>
-                    <div class="ingredient-button">Hüttenkäse</div>
-                    <div class="ingredient-button">Ricotta</div>
-                    <div class="ingredient-button">Mascarpone</div>
-                    <div class="ingredient-button">Kefir</div>
-                    <div class="ingredient-button">Skyr</div>
+                    <h2 data-emoji="🥛"> Milchprodukte</h2>
+                    <div class="ingredient-list" id="basicIngredientsList3">
+                        <div class="ingredient-button">Milch</div>
+                        <div class="ingredient-button">Butter</div>
+                        <div class="ingredient-button">Käse</div>
+                        <div class="ingredient-button">Joghurt</div>
+                        <div class="ingredient-button">Sahne</div>
+                        <div class="ingredient-button">Quark</div>
+                        <div class="ingredient-button">Buttermilch</div>
+                        <div class="ingredient-button">Crème fraiche</div>
+                        <div class="ingredient-button">Hüttenkäse</div>
+                        <div class="ingredient-button">Ricotta</div>
+                        <div class="ingredient-button">Mascarpone</div>
+                        <div class="ingredient-button">Kefir</div>
+                        <div class="ingredient-button">Skyr</div>
+                        <div class="ingredient-button">Schmand</div>
+                        <div class="ingredient-button">Frischkäse</div>
+                        <div class="ingredient-button">Mozzarella</div>
+                        <div class="ingredient-button">Parmesan</div>
+                        <div class="ingredient-button">Feta</div>
+                        <div class="ingredient-button">Gouda</div>
+                        <div class="ingredient-button">Emmentaler</div>
+                        <div class="ingredient-button">Camembert</div>
+                        <div class="ingredient-button">Brie</div>
+                        <div class="ingredient-button">Ziegenkäse</div>
+                        <div class="ingredient-button">Schafskäse</div>
+                        <div class="ingredient-button">Gruyère</div>
+                        <div class="ingredient-button">Gorgonzola</div>
+                        <div class="ingredient-button">Saure Sahne</div>
+                        <div class="ingredient-button">Kondensmilch</div>
+                        <button class="showMoreBtn" onclick="toggleIngredients('basicIngredientsList3', this)">mehr</button>
+                    </div>
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🥩 Fleischprodukte</h2>
-                    <div class="ingredient-button">Hähnchenbrust</div>
-                    <div class="ingredient-button">Rinderhackfleisch</div>
-                    <div class="ingredient-button">Schweinefilet</div>
-                    <div class="ingredient-button">Lammkoteletts</div>
-                    <div class="ingredient-button">Putenbrust</div>
-                    <div class="ingredient-button">Rindersteak</div>
-                    <div class="ingredient-button">Schweinebauch</div>
-                    <div class="ingredient-button">Kalbsleber</div>
-                    <div class="ingredient-button">Entenbrust</div>
-                    <div class="ingredient-button">Hähnchenschenkel</div>
-                    <div class="ingredient-button">Rinderbraten</div>
-                    <div class="ingredient-button">Schweineschnitzel</div>
-                    <div class="ingredient-button">Lammkeule</div>
-                    <div class="ingredient-button">Putenkeule</div>
+                    <h2 data-emoji="🥩"> Fleischprodukte</h2>
+                    <div class="ingredient-list" id="basicIngredientsList4">
+                        <div class="ingredient-button">Hähnchenbrust</div>
+                        <div class="ingredient-button">Rinderhackfleisch</div>
+                        <div class="ingredient-button">Schweinefilet</div>
+                        <div class="ingredient-button">Lammkoteletts</div>
+                        <div class="ingredient-button">Putenbrust</div>
+                        <div class="ingredient-button">Rindersteak</div>
+                        <div class="ingredient-button">Schweinebauch</div>
+                        <div class="ingredient-button">Kalbsleber</div>
+                        <div class="ingredient-button">Entenbrust</div>
+                        <div class="ingredient-button">Hähnchenschenkel</div>
+                        <div class="ingredient-button">Rinderbraten</div>
+                        <div class="ingredient-button">Schweineschnitzel</div>
+                        <div class="ingredient-button">Lammkeule</div>
+                        <div class="ingredient-button">Putenkeule</div>
+                        <div class="ingredient-button">Rinderwurst</div>
+                        <div class="ingredient-button">Speck</div>
+                        <div class="ingredient-button">Salami</div>
+                        <div class="ingredient-button">Schinken</div>
+                        <div class="ingredient-button">Bratwurst</div>
+                        <div class="ingredient-button">Leberwurst</div>
+                        <div class="ingredient-button">Kasseler</div>
+                        <div class="ingredient-button">Gulaschfleisch</div>
+                        <div class="ingredient-button">Rinderrouladen</div>
+                        <div class="ingredient-button">Schweinekoteletts</div>
+                        <div class="ingredient-button">Hähnchenflügel</div>
+                        <div class="ingredient-button">Truthahnbrust</div>
+                        <div class="ingredient-button">Kalbsschnitzel</div>
+                        <div class="ingredient-button">Wildschweinfleisch</div>
+                        <div class="ingredient-button">Rehkeule</div>
+                        <button class="showMoreBtn" onclick="toggleIngredients('basicIngredientsList4', this)">mehr</button>
+                    </div>
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🫘 Getreide und Hülsenfrüchte</h2>
-                    <div class="ingredient-button">Reis</div>
-                    <div class="ingredient-button">Nudeln</div>
-                    <div class="ingredient-button">Quinoa</div>
-                    <div class="ingredient-button">Couscous</div>
-                    <div class="ingredient-button">Linsen</div>
-                    <div class="ingredient-button">Kichererbsen</div>
-                    <div class="ingredient-button">Bohnen</div>
-                    <div class="ingredient-button">Haferflocken</div>
-                    <div class="ingredient-button">Bulgur</div>
-                    <div class="ingredient-button">Gerste</div>
-                    <div class="ingredient-button">Hirse</div>
-                    <div class="ingredient-button">Polenta</div>
-                    <div class="ingredient-button">Buchweizen</div>
-                    <div class="ingredient-button">Amaranth</div>
+                    <h2 data-emoji="🍚"> Getreide und Hülsenfrüchte</h2>
+                    <div class="ingredient-list" id="basicIngredientsList5">
+                        <div class="ingredient-button">Reis</div>
+                        <div class="ingredient-button">Nudeln</div>
+                        <div class="ingredient-button">Quinoa</div>
+                        <div class="ingredient-button">Couscous</div>
+                        <div class="ingredient-button">Linsen</div>
+                        <div class="ingredient-button">Kichererbsen</div>
+                        <div class="ingredient-button">Bohnen</div>
+                        <div class="ingredient-button">Haferflocken</div>
+                        <div class="ingredient-button">Bulgur</div>
+                        <div class="ingredient-button">Gerste</div>
+                        <div class="ingredient-button">Hirse</div>
+                        <div class="ingredient-button">Polenta</div>
+                        <div class="ingredient-button">Buchweizen</div>
+                        <div class="ingredient-button">Amaranth</div>
+                        <div class="ingredient-button">Erbsen</div>
+                        <div class="ingredient-button">Sojabohnen</div>
+                        <div class="ingredient-button">Mungbohnen</div>
+                        <div class="ingredient-button">Adzukibohnen</div>
+                        <div class="ingredient-button">Weiße Bohnen</div>
+                        <div class="ingredient-button">Kidneybohnen</div>
+                        <div class="ingredient-button">Schwarze Bohnen</div>
+                        <div class="ingredient-button">Belugalinsen</div>
+                        <div class="ingredient-button">Rote Linsen</div>
+                        <div class="ingredient-button">Grüne Linsen</div>
+                        <div class="ingredient-button">Dinkel</div>
+                        <div class="ingredient-button">Emmer</div>
+                        <div class="ingredient-button">Einkorn</div>
+                        <div class="ingredient-button">Roggen</div>
+                        <div class="ingredient-button">Hafer</div>
+                        <div class="ingredient-button">Wildreis</div>
+                        <div class="ingredient-button">Vollkornreis</div>
+                        <div class="ingredient-button">Basmatireis</div>
+                        <div class="ingredient-button">Jasminreis</div>
+                        <div class="ingredient-button">Grünkern</div>
+                        <button class="showMoreBtn" onclick="toggleIngredients('basicIngredientsList5', this)">mehr</button>
+                    </div>
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🌿 Gewürze und Kräuter</h2>
-                    <div class="ingredient-button">Salz</div>
-                    <div class="ingredient-button">Pfeffer</div>
-                    <div class="ingredient-button">Paprika</div>
-                    <div class="ingredient-button">Oregano</div>
-                    <div class="ingredient-button">Basilikum</div>
-                    <div class="ingredient-button">Thymian</div>
-                    <div class="ingredient-button">Rosmarin</div>
-                    <div class="ingredient-button">Kurkuma</div>
-                    <div class="ingredient-button">Zimt</div>
-                    <div class="ingredient-button">Muskatnuss</div>
-                    <div class="ingredient-button">Kreuzkümmel</div>
-                    <div class="ingredient-button">Koriander</div>
-                    <div class="ingredient-button">Dill</div>
-                    <div class="ingredient-button">Petersilie</div>
+                    <h2 data-emoji="🧂"> Gewürze und Kräuter</h2>
+                    <div class="ingredient-list" id="basicIngredientsList6">
+                        <div class="ingredient-button">Salz</div>
+                        <div class="ingredient-button">Pfeffer</div>
+                        <div class="ingredient-button">Paprika</div>
+                        <div class="ingredient-button">Oregano</div>
+                        <div class="ingredient-button">Basilikum</div>
+                        <div class="ingredient-button">Thymian</div>
+                        <div class="ingredient-button">Rosmarin</div>
+                        <div class="ingredient-button">Kurkuma</div>
+                        <div class="ingredient-button">Zimt</div>
+                        <div class="ingredient-button">Muskatnuss</div>
+                        <div class="ingredient-button">Kreuzkümmel</div>
+                        <div class="ingredient-button">Koriander</div>
+                        <div class="ingredient-button">Dill</div>
+                        <div class="ingredient-button">Petersilie</div>
+                        <div class="ingredient-button">Salbei</div>
+                        <div class="ingredient-button">Minze</div>
+                        <div class="ingredient-button">Schnittlauch</div>
+                        <div class="ingredient-button">Knoblauch</div>
+                        <div class="ingredient-button">Ingwer</div>
+                        <div class="ingredient-button">Kardamom</div>
+                        <div class="ingredient-button">Nelken</div>
+                        <div class="ingredient-button">Lorbeerblätter</div>
+                        <div class="ingredient-button">Kümmel</div>
+                        <div class="ingredient-button">Anis</div>
+                        <div class="ingredient-button">Fenchel</div>
+                        <div class="ingredient-button">Estragon</div>
+                        <div class="ingredient-button">Majoran</div>
+                        <div class="ingredient-button">Bohnenkraut</div>
+                        <div class="ingredient-button">Chili</div>
+                        <div class="ingredient-button">Safran</div>
+                        <div class="ingredient-button">Sternanis</div>
+                        <div class="ingredient-button">Vanille</div>
+                        <div class="ingredient-button">Zitronengras</div>
+                        <div class="ingredient-button">Koriandersamen</div>
+                        <button class="showMoreBtn" onclick="toggleIngredients('basicIngredientsList6', this)">mehr</button>
+                    </div>
                 </div>
                 <div class="basic-ingredients">
-                    <h2>🍰 Backzutaten</h2>
-                    <div class="ingredient-button">Mehl</div>
-                    <div class="ingredient-button">Zucker</div>
-                    <div class="ingredient-button">Backpulver</div>
-                    <div class="ingredient-button">Vanillezucker</div>
-                    <div class="ingredient-button">Hefe</div>
-                    <div class="ingredient-button">Kakao</div>
-                    <div class="ingredient-button">Schokolade</div>
-                    <div class="ingredient-button">Mandeln</div>
-                    <div class="ingredient-button">Haselnüsse</div>
-                    <div class="ingredient-button">Walnüsse</div>
-                    <div class="ingredient-button">Kokosraspeln</div>
-                    <div class="ingredient-button">Puderzucker</div>
-                    <div class="ingredient-button">Speisestärke</div>
-                    <div class="ingredient-button">Honig</div>
+                    <h2 data-emoji="🍰"> Backzutaten</h2>
+                    <div class="ingredient-list" id="basicIngredientsList7">
+                        <div class="ingredient-button">Mehl</div>
+                        <div class="ingredient-button">Zucker</div>
+                        <div class="ingredient-button">Backpulver</div>
+                        <div class="ingredient-button">Vanillezucker</div>
+                        <div class="ingredient-button">Hefe</div>
+                        <div class="ingredient-button">Kakao</div>
+                        <div class="ingredient-button">Schokolade</div>
+                        <div class="ingredient-button">Mandeln</div>
+                        <div class="ingredient-button">Haselnüsse</div>
+                        <div class="ingredient-button">Walnüsse</div>
+                        <div class="ingredient-button">Kokosraspeln</div>
+                        <div class="ingredient-button">Puderzucker</div>
+                        <div class="ingredient-button">Speisestärke</div>
+                        <div class="ingredient-button">Honig</div>
+                        <div class="ingredient-button">Rosinen</div>
+                        <div class="ingredient-button">Zitronat</div>
+                        <div class="ingredient-button">Orangeat</div>
+                        <div class="ingredient-button">Marzipan</div>
+                        <div class="ingredient-button">Nüsse</div>
+                        <div class="ingredient-button">Zimt</div>
+                        <div class="ingredient-button">Kardamom</div>
+                        <div class="ingredient-button">Backoblaten</div>
+                        <div class="ingredient-button">Lebensmittelfarbe</div>
+                        <div class="ingredient-button">Backaroma</div>
+                        <div class="ingredient-button">Kuchenglasur</div>
+                        <div class="ingredient-button">Streusel</div>
+                        <button class="showMoreBtn" onclick="toggleIngredients('basicIngredientsList7', this)">mehr</button>
+                    </div>
                 </div>
             </div> 
         </div>
+
+        <script>
+    const maxVisibleIngredients = 10;
+
+    function toggleIngredients(listId, button) {
+        const ingredientList = document.getElementById(listId);
+        const ingredients = Array.from(ingredientList.querySelectorAll('.ingredient-button'));
+        const showMoreBtn = ingredientList.querySelector('.showMoreBtn');
+        let isExpanded = showMoreBtn.getAttribute('data-expanded') === 'true';
+
+        if (isExpanded) {
+            maxVisibles = Math.floor(Math.random() * (14 - 8 + 1)) + 8;
+            ingredients.forEach((ingredient, index) => {
+                if (index >= maxVisibles) {
+                    ingredient.style.display = 'none';
+                }
+            });
+            showMoreBtn.innerText = 'mehr';
+        } else {
+            ingredients.forEach(ingredient => {
+                ingredient.style.display = 'inline-block';
+            });
+            showMoreBtn.innerText = 'weniger';
+        }
+        showMoreBtn.setAttribute('data-expanded', !isExpanded);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const ingredientLists = document.querySelectorAll('.ingredient-list');
+        ingredientLists.forEach(list => {
+            const ingredients = Array.from(list.querySelectorAll('.ingredient-button'));
+            maxVisibles = Math.floor(Math.random() * (14 - 8 + 1)) + 8;
+            ingredients.forEach((ingredient, index) => {
+                if (index >= maxVisibles) {
+                    ingredient.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
 
         <!-- Rechte Seite: Ergebnisse -->
         <div class="panel right-panel">
