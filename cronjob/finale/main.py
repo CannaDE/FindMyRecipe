@@ -13,7 +13,7 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
-def main(debug):
+def main(debug, website_name):
     start_time = time.time()
     try:
         if debug:
@@ -39,7 +39,16 @@ def main(debug):
             print(f"{RESET}{len(existing_recipes)} {GREEN} recipes have been loaded from the database..")
         else:
             existing_recipes = []
-        for website in website_configs['websites']:
+
+        # Filter websites based on the optional website_name parameter
+        websites_to_scrape = website_configs['websites']
+        if website_name:
+            websites_to_scrape = [website for website in websites_to_scrape if website['name'] == website_name]
+            if not websites_to_scrape:
+                print(f"{RED}No website found with the name {website_name}{RESET}")
+                return
+
+        for website in websites_to_scrape:
             print(f"{CYAN}Scraping the following page {RESET}{website['url']}")
 
             if 'pages' in website:
@@ -47,13 +56,9 @@ def main(debug):
                     page_url = f"{website['url']}{website['page_param']}{page_num}"
                     print(f"{CYAN}Scraping page number {RESET}{page_num} {CYAN}of {RESET}{website['pages']}")
                     scraper.scrap_recipe_overview(page_url, website, existing_recipes, debug)
-                    # recipe_id = database.insert_recipe(connection, title, description, website['source_id'], page_url, image_url)
             else:
                 scraper.scrap_recipe_overview(website["url"], website, existing_recipes, debug)
                 
-        
-
-
     except KeyboardInterrupt:
         print(f"{RED}Execution was terminated by user..{RESET}")
 
@@ -62,16 +67,13 @@ def main(debug):
             connection.close()
             print(f"{RED}MySQL database connection has closed!")
 
-
         new_recipes = scraper.get_new_recipes_count()
         print(f"{GREEN}Number of new recipes found: {RESET}{new_recipes}")
         end_time = time.time()
         elapsed_time = end_time - start_time
-        # Umwandlung der Sekunden in Stunden, Minuten und Sekunden
-        hours, rem = divmod(elapsed_time, 3600)  # 3600 Sekunden = 1 Stunde
-        minutes, seconds = divmod(rem, 60)       # 60 Sekunden = 1 Minute
+        hours, rem = divmod(elapsed_time, 3600)
+        minutes, seconds = divmod(rem, 60)
 
-        # Ausgabe in Stunden, Minuten und Sekunden, je nach Länge der Laufzeit
         if hours > 0:
             print(f"Laufzeit des Crawlers: {int(hours)} Stunden, {int(minutes)} Minuten & {int(seconds)} Sekunden")
         elif minutes > 0:
@@ -82,6 +84,7 @@ def main(debug):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Crawler for recipe websites.")
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    parser.add_argument('--website', type=str, help='Specify a website to scrape')
     args = parser.parse_args()
 
-    main(args.debug)
+    main(args.debug, args.website)
