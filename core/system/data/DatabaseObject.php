@@ -57,9 +57,11 @@ abstract class DatabaseObject implements StorableObjectInterface {
             $sql = "SELECT  *
                     FROM    " . static::getDatabaseTableName() . "
                     WHERE   " . static::getDatabaseTableIndexName() . " = ?";
+                    
             $statement = FindMyRecipe::getDB()->prepareStatement($sql);
             $statement->execute([$id]);
             $row = $statement->fetchArray();
+            
 
             // enforce data type 'array'
             if ($row === false) {

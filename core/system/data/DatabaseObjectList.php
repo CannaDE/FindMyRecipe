@@ -161,6 +161,7 @@ abstract class DatabaseObjectList implements \Countable {
                             " . $this->sqlJoins . "
                     WHERE   " . $this->getDatabaseTableAlias() . "." . $this->getDatabaseTableIndexName() . " IN ({$objectIdPlaceholder})
                             " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
+                            
             $statement = FindMyRecipe::getDB()->prepareStatement($sql);
             $statement->execute($this->objectIDs);
             $this->objects = $statement->fetchObjects(($this->objectClassName ?: $this->className));
@@ -171,8 +172,8 @@ abstract class DatabaseObjectList implements \Countable {
                     " . $this->sqlJoins . "
                     " . $this->getConditionBuilder() . "
                     " . (!empty($this->sqlOrderBy) ? "ORDER BY " . $this->sqlOrderBy : '');
-
             $statement = FindMyRecipe::getDB()->prepareStatement($sql, $this->sqlLimit, $this->sqlOffset);
+
             $statement->execute($this->getConditionBuilder()->getParameters());
             $this->objects = $statement->fetchObjects(($this->objectClassName ?: $this->className));
         }

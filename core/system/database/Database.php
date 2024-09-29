@@ -211,6 +211,7 @@ class Database {
             $pdoStatement = self::$pdo->prepare($statement);
             return new PreparedStatement($pdoStatement, $statement);
         } catch (PDOException $e) {
+            
             throw new DatabaseException("Could not prepare statement '" . $statement . "'");
         }
     }
