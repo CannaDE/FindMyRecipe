@@ -13,7 +13,7 @@ RESET = "\033[0m"
 
 new_recipes_count = 0
 # function to extract the recipe url from a overview site
-def scrap_recipe_overview(url, website, existing_recipes, debug): 
+def scrap_recipe_overview(url, website, existing_recipes, debug, save_to_file): 
     global new_recipes_count
     
     header = {
@@ -54,12 +54,17 @@ def scrap_recipe_overview(url, website, existing_recipes, debug):
                 for ingredient in ingredients:
                     ingredient_id = database.get_or_create_ingredient(ingredient)
                     database.insert_recipe_ingredient(recipe_id, ingredient_id)
-                pass
             else:
                 print(f"{GREEN}Title: {title}")
                 print(f"{GREEN}Description: {description}")
                 print(f"{GREEN}Image URL: {image_url}")
                 print(f"{GREEN}Ingredients: {ingredients}")
+                if save_to_file:
+                    with open("debug.txt", 'a') as f:
+                        f.write(f"Title: {title}\n")
+                        f.write(f"Description: {description}\n")
+                        f.write(f"Image URL: {image_url}\n")
+                        f.write(f"Ingredients: {ingredients}\n\n")
             new_recipes_count += 1
         except Exception as e:
             print(f"Error scraping {website['name']}: {e}")

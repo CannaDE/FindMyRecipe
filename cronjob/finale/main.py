@@ -13,7 +13,7 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
-def main(debug, website_name):
+def main(debug, website_name, save_to_file):
     start_time = time.time()
     try:
         if debug:
@@ -55,9 +55,9 @@ def main(debug, website_name):
                 for page_num in range(1, website['pages'] + 1):
                     page_url = f"{website['url']}{website['page_param']}{page_num}"
                     print(f"{CYAN}Scraping page number {RESET}{page_num} {CYAN}of {RESET}{website['pages']}")
-                    scraper.scrap_recipe_overview(page_url, website, existing_recipes, debug)
+                    scraper.scrap_recipe_overview(page_url, website, existing_recipes, debug, save_to_file)
             else:
-                scraper.scrap_recipe_overview(website["url"], website, existing_recipes, debug)
+                scraper.scrap_recipe_overview(website["url"], website, existing_recipes, debug, save_to_file)
                 
     except KeyboardInterrupt:
         print(f"{RED}Execution was terminated by user..{RESET}")
@@ -65,7 +65,7 @@ def main(debug, website_name):
     finally:
         if connection.is_connected():
             connection.close()
-            print(f"{RED}MySQL database connection has closed!")
+            print(f"{RED}MySQL database connection has closed!{RESET}")
 
         new_recipes = scraper.get_new_recipes_count()
         print(f"{GREEN}Number of new recipes found: {RESET}{new_recipes}")
@@ -75,16 +75,17 @@ def main(debug, website_name):
         minutes, seconds = divmod(rem, 60)
 
         if hours > 0:
-            print(f"Laufzeit des Crawlers: {int(hours)} Stunden, {int(minutes)} Minuten & {int(seconds)} Sekunden")
+            print(f"Runtime of the crawler: {int(hours)} hours, {int(minutes)} minutes & {int(seconds)} seconds")
         elif minutes > 0:
-            print(f"Laufzeit des Crawlers: {int(minutes)} Minuten und {int(seconds)} Sekunden")
+            print(f"Runtime of the crawler: {int(minutes)} minutes and {int(seconds)} seconds")
         else:
-            print(f"Laufzeit des Crawlers: {int(seconds)} Sekunden")
+            print(f"Runtime of the crawler: {int(seconds)} seconds")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Crawler for recipe websites.")
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('--website', type=str, help='Specify a website to scrape')
+    parser.add_argument('--save-to-file', action='store_true', help='Save debug results to a file')
     args = parser.parse_args()
 
-    main(args.debug, args.website)
+    main(args.debug, args.website, args.save_to_file)
