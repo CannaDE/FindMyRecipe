@@ -44,7 +44,7 @@
 <div id="preloader"><div class="spinner-border color-highlight" role="status"></div></div>
 <span id="pageTop"></span>
 <div class="container">
-        <div class="image-container {if MAINTENANCE_MODE}maintenance{/if}"></div>
+        <div class="image-container {if MAINTENANCE_MODE}maintenance{else}error{/if} "></div>
         <div class="content-container">
             <h1>{PAGE_TITLE}</h1>
             <div class="divider"></div>
