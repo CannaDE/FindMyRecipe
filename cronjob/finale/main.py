@@ -4,8 +4,7 @@ import database
 import scraper
 import logging
 import argparse
-import requests
-import os
+from logger_config import setup_logger
 import notification
 
 RED = "\033[31m"
@@ -15,22 +14,24 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
+# Configure logging
+logger = setup_logger(__name__)
 
 def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ignore_existing):
     start_time = time.time()
     try:
         if debug:
             print(f"{RED}╔═══════════════════════════════════════════════════════════════════╗")
-            print(f"║ {YELLOW}⚠️  ATTENTION: Debug Mode Activated!  ⚠️{RED}                            ║")
-            print(f"║                                                                   ║")
-            print(f"║ {CYAN}In this mode, no data will be saved to the database.{RED}              ║")
-            print(f"║ {CYAN}All discovered recipes will be displayed for viewing only.{RED}        ║")
-            print(f"║ {CYAN}Existing recipes are NOT considered in Debug Mode.{RED}                ║")
-            print(f"║                                                                   ║")
-            print(f"║ {CYAN}Use --save-to-file to optionally save debug results to a file.{RED}    ║")
-            print(f"║                                                                   ║")
-            print(f"║ {GREEN}Happy testing and debugging! 🕵️‍♂️🔍{RED}                                ║")
-            print(f"╚═══════════════════════════════════════════════════════════════════╝{RESET}")
+            print(f"{RED}║ {YELLOW}⚠️  ATTENTION: Debug Mode Activated!  ⚠️{RED}                            ║")
+            print(f"{RED}║                                                                   ║")
+            print(f"{RED}║ {CYAN}In this mode, no data will be saved to the database.{RED}              ║")
+            print(f"{RED}║ {CYAN}All discovered recipes will be displayed for viewing only.{RED}        ║")
+            print(f"{RED}║ {CYAN}Existing recipes are NOT considered in Debug Mode.{RED}                ║")
+            print(f"{RED}║                                                                   ║")
+            print(f"{RED}║ {CYAN}Use --save-to-file to optionally save debug results to a file.{RED}    ║")
+            print(f"{RED}║                                                                   ║")
+            print(f"{RED}║ {GREEN}Happy testing and debugging! 🕵️‍♂️🔍{RED}                                ║")
+            print(f"{RED}╚═══════════════════════════════════════════════════════════════════╝{RESET}")
         else:
             print(f"\n{CYAN}* * * Recipe Crawler Launching * * *{RESET}")
             print(f"{GREEN}> Starting the hunt for tasty new recipes{RESET}")
@@ -45,7 +46,7 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ign
     
         if not debug and not ignore_existing:
             existing_recipes = database.get_existing_recipes()
-            print(f"{RESET}{len(existing_recipes)} {GREEN} recipes have been loaded from the database..")
+            logger.info(f"{len(existing_recipes)} recipes have been loaded from the database.")
         else:
             existing_recipes = []
 
@@ -54,19 +55,19 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ign
         if website_name:
             websites_to_scrape = [website for website in websites_to_scrape if website['name'] == website_name]
             if not websites_to_scrape:
-                print(f"{RED}No website found with the name {website_name}{RESET}")
+                logger.error(f"No website found with the name: {website_name}. Please check the configuration.")
                 return
 
         if rate_limit:
             rate_limit_interval = 1.0 / rate_limit
         
         for website in websites_to_scrape:
-            print(f"{CYAN}Scraping the following page {RESET}{website['url']}")
+            logger.info(f"Scraping the following page {website['url']}")
 
             if 'pages' in website:
                 for page_num in range(1, website['pages'] + 1):
                     page_url = f"{website['url']}{website['page_param']}{page_num}"
-                    print(f"{CYAN}Scraping page number {RESET}{page_num} {CYAN}of {RESET}{website['pages']}")
+                    logger.info(f"Scraping page number {page_num} of {website['pages']}")
                     scraper.scrap_recipe_overview(page_url, website, existing_recipes, debug, save_to_file, user_agent, timeout)
                     if rate_limit:
                         time.sleep(rate_limit_interval)
@@ -78,39 +79,41 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ign
         neue_rezepte = scraper.get_new_recipes_count()
         end_time = time.time()
         elapsed_time = end_time - start_time
-        message = notification.buildCrawlerSuccessMessage(neue_rezepte, elapsed_time)
-        notification.send_telegram_notifications(message)
+
+        if not debug:
+            message = notification.buildCrawlerSuccessMessage(neue_rezepte, elapsed_time)
+            notification.send_telegram_notifications(message)
                 
     except KeyboardInterrupt:
-        print(f"{RED}Execution was terminated by user..{RESET}")
+        logger.error(f"Execution was terminated by user.")
         new_recipes = scraper.get_new_recipes_count()
         end_time = time.time()
         elapsed_time = end_time - start_time
-        message = notification.buildCrawlerUserExitedMessage(new_recipes, elapsed_time)
-        notification.send_telegram_notifications(message)
+
+        if not debug:
+            message = notification.buildCrawlerUserExitedMessage(new_recipes, elapsed_time)
+            notification.send_telegram_notifications(message)
 
     finally:
         if connection.is_connected():
             connection.close()
-            print(f"{RED}MySQL database connection has closed!{RESET}")
+            logger.info(f"MySQL database connection has closed!")
 
         new_recipes = scraper.get_new_recipes_count()
-        print(f"{GREEN}Number of new recipes found: {RESET}{new_recipes}")
+        logger.info(f"Number of new recipes found: {new_recipes}")
         end_time = time.time()
         elapsed_time = end_time - start_time
         hours, rem = divmod(elapsed_time, 3600)
         minutes, seconds = divmod(rem, 60)
 
         if hours > 0:
-            print(f"Runtime of the crawler: {int(hours)} hours, {int(minutes)} minutes & {int(seconds)} seconds")
+            logger.info(f"Runtime of the crawler: {int(hours)} hours, {int(minutes)} minutes & {int(seconds)} seconds")
         elif minutes > 0:
-            print(f"Runtime of the crawler: {int(minutes)} minutes and {int(seconds)} seconds")
+            logger.info(f"Runtime of the crawler: {int(minutes)} minutes and {int(seconds)} seconds")
         else:
-            print(f"Runtime of the crawler: {int(seconds)} seconds")
+            logger.info(f"Runtime of the crawler: {int(seconds)} seconds")
 
-
-
-if __name__ == '__main__':
+if __name__ == '__main__': 
     parser = argparse.ArgumentParser(description="Crawler for recipe websites.")
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
     parser.add_argument('--rate-limit', type=int, help='Limit the number of requests per second')

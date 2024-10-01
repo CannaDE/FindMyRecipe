@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+from logger_config import setup_logger
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -9,6 +10,7 @@ CYAN = "\033[36m"
 RESET = "\033[0m"
 
 _connection = None
+logger = setup_logger(__name__)
 
 # Funktion, um die MySQL-Verbindung herzustellen
 def create_connection():
@@ -24,10 +26,10 @@ def create_connection():
                 collation='utf8mb4_unicode_ci'
             )
             if _connection.is_connected():
-                print(f"{GREEN}MySQL Database connection successfully")
+                logger.info(f"MySQL Database connection successfully")
         except Error as e:
-            print(f"{RED}MySQL Database connection error: {RESET}{e}")
-            _connection = None
+            logger.info(f"MySQL Database connection error: {e}")
+            exit(1)
     return _connection
 
 # Funktion, um die bestehende Verbindung zu erhalten

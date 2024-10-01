@@ -1,6 +1,7 @@
-import requests;
+import requests
+import logging
 from colorama import Fore, Style, init
-
+from logger_config import setup_logger
 # Initialize colorama
 init(autoreset=True)
 
@@ -14,6 +15,9 @@ RESET = Style.RESET_ALL
 TELEGRAM_TOKEN = "8055605849:AAFoZIFir5qT5i-934FzIKy06aL8G3S2xpI"
 TELEGRAM_CHAT_IDS = ["215730917"]
 
+# Configure logging
+logger = setup_logger(__name__)
+
 def send_telegram_notifications(message):    
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     
@@ -26,9 +30,9 @@ def send_telegram_notifications(message):
         try:
             response = requests.post(url, data=payload)
             if response.status_code != 200:
-                print(f"{RED}Failed to send Telegram notification to chat ID {chat_id}: {response.text}")
+                logger.error(f"Failed to send Telegram notification to chat ID {chat_id}: {response.text}")
         except Exception as e:
-            print(f"{RED}Failed to send Telegram notification to chat ID {chat_id}: {e}")
+            logger.error(f"Failed to send Telegram notification to chat ID {chat_id}: {e}")
 
 def buildCrawlerSuccessMessage(new_recipes, elapsed_time):
     hours, rem = divmod(elapsed_time, 3600)
