@@ -22,6 +22,20 @@
 
     {/if}
 
+    <script>
+    setTimeout(function(){
+        let preloader = document.getElementById('preloader')
+        if(preloader){literal}{preloader.classList.add('preloader-hide');}{/literal}
+            },150);
+
+    //Don't jump on Empty Links
+    const emptyHref = document.querySelectorAll('a[href="#"]')
+    emptyHref.forEach(el => el.addEventListener('click', e => {
+        e.preventDefault();
+        return false;
+    }));
+    </script>
+
     
 
     {if !$canonicalURL|empty}
