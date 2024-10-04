@@ -15,6 +15,8 @@ define(["require", "exports", "tslib", "Environment", "Ui/Notification", "Ui/Dia
         Dialog.default.setup();
         Tooltip.setup();
 
+        
+
         if(Environment.browser() === "microsoft") {
             window.onbeforeunload = () => {
                 /* Prevent "Back navigation caching" (http://msdn.microsoft.com/en-us/library/ie/dn265017%28v=vs.85%29.aspx) */
@@ -22,4 +24,13 @@ define(["require", "exports", "tslib", "Environment", "Ui/Notification", "Ui/Dia
         }
     }
     exports.setup = setup;   
+
+    function setThemeBasedOnSystemPreference() {
+        let prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        const htmlElement = document.documentElement;
+        if(prefersDarkScheme)
+            htmlElement.dataset.colorSheme = "dark";
+        else
+            htmlElement.dataset.colorSheme = "light";
+    }
 });
