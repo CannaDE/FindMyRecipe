@@ -1,25 +1,25 @@
 html[data-color-sheme="dark"] body, html[data-color-sheme="dark"] #preloader{
     background-color: rgba(26, 29, 33, 1);
 }
-html[data-color-sheme="dark"] p.success {
+html[data-color-sheme="dark"] .success {
     background-color: rgba(0, 94, 70, 1);
     border-color: rgba(0, 113, 84, 1);
     color: rgba(180, 203, 195, 1);
 }
 
-html[data-color-sheme="dark"] p.info {
+html[data-color-sheme="dark"] .info {
     background-color: rgba(12, 81, 92, 1);
     border-color: rgba(14, 97, 110, 1);
     color: rgba(171, 191, 196, 1);
 }
 
-html[data-color-sheme="dark"] p.error {
+html[data-color-sheme="dark"] .error {
     background-color: rgba(116, 38, 30, 1);
     border-color: rgba(139, 46, 36, 1);
     color: rgba(201, 170, 165, 1);
 }
 
-html[data-color-sheme="dark"] p.warning {
+html[data-color-sheme="dark"] .warning {
     background-color: rgba(122, 78, 9, 1);
     border-color: rgba(146, 94, 11, 1);
     color: rgba(221, 209, 194, 1);
@@ -29,25 +29,32 @@ html[data-color-sheme="dark"] p.warning {
 html[data-color-sheme="light"] body, html[data-color-sheme="light"] #preloader{
     background-color: #f4f4f4;
 }
-html[data-color-sheme="light"] p.success {
+html[data-color-sheme="light"] .success {
     background-color: rgba(223, 240, 216, 1);
     border-color: rgba(208, 233, 198, 1);
     color: rgba(60, 118, 61, 1);
 }
+.alert {
+    padding: 15px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
 
-html[data-color-sheme="light"] p.info {
+html[data-color-sheme="light"] .info {
     background-color: rgba(217, 237, 247, 1);
     border-color: rgba(188, 223, 241, 1);
     color: rgba(49, 112, 143, 1);
 }
 
-html[data-color-sheme="light"] p.error {
+html[data-color-sheme="light"] .error {
     background-color: rgba(242, 222, 222, 1);
     border-color: rgba(235, 204, 204, 1);
     color: rgba(169, 68, 66, 1);
 }
 
-html[data-color-sheme="light"] p.warning {
+html[data-color-sheme="light"] .warning {
     background-color: rgba(252, 248, 227, 1);
     border-color: rgba(250, 242, 204, 1);
     color: rgba(138, 109, 59, 1);
@@ -433,13 +440,6 @@ input[type="text"]:focus {
     background-color: #d4d4d4;
 }
 
-.info-box {
-    padding: 15px;
-    background-color: #e9f7f6;
-    border-left: 4px solid #4BB5C1;
-    margin-bottom: 10px;
-    margin-top: 20px;
-}
 
 
 .basic-ingredients {

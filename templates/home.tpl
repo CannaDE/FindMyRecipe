@@ -71,7 +71,7 @@
                 <input type="text" id="ingredientSearch" placeholder="Neue Zutat eingeben" onkeyup="" autocomplete="off">
                 <div id="suggestions"></div>
 
-                <div class="info-box">Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</div>
+                <div class="alert info"><span class="fa fa-info-circle"></span>Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</div>
 
                 {assign var="ingredientCategoryCounter" value=0}
                 {foreach from=$ingredients item=category key=key}
@@ -79,9 +79,9 @@
                         <h2>{$key}</h2>
                         <div class="ingredient-list" id="basicIngredientsList{$ingredientCategoryCounter}">
                             {foreach from=$category item=ingredient}
-                                <div class="ingredient-button jsTooltip" title="auswählen"">{$ingredient}</div>
+                                <div class="ingredient-button">{$ingredient}</div>
                             {/foreach}
-                            <button class="showMoreBtn" onclick="toggleIngredients('basicIngredientsList{$ingredientCategoryCounter}', this)">mehr</button>
+                            <button class="showMoreBtn" >mehr</button>
                         </div>
                 </div>
                 {assign var="ingredientCategoryCounter" value=$ingredientCategoryCounter+1}
