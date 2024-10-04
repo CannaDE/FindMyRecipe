@@ -39,7 +39,7 @@ jobs:
           sed -i 's|with open("urls.json", '\''r'\'') as file:|with open("www/finde-mein-rezept.de/cronjob/finale/urls.json", '\''r'\'') as file:|' cronjob/finale/main.py
 
       - name: 🔁 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        uses: SamKirkland/FTP-Deploy-Action@4.3.5
         with:
           server: dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
