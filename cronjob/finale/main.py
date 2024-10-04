@@ -6,6 +6,8 @@ import logging
 import argparse
 from logger_config import setup_logger
 import notification
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -17,7 +19,37 @@ RESET = "\033[0m"
 # Configure logging
 logger = setup_logger(__name__)
 
-def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ignore_existing):
+def scrape_page(page_url, website, existing_recipes, debug, save_to_file, user_agent, timeout):
+    thread_id = threading.get_ident()
+    logger.info(f"Thread {thread_id}: Scraping page {page_url}")
+    connection = database.get_connection()
+    scraper.scrap_recipe_overview(connection,page_url, website, existing_recipes, debug, save_to_file, user_agent, timeout)
+
+def scrape_website(website, existing_recipes, debug, save_to_file, user_agent, timeout, rate_limit_interval, max_threads):
+    if 'pages' in website:
+        page_urls = [f"{website['url']}{website['page_param']}{page_num}" for page_num in range(1, website['pages'] + 1)]
+        
+        if debug:
+            max_threads = 1
+        
+        with ThreadPoolExecutor(max_workers=max_threads) as executor:
+            futures = [executor.submit(scrape_page, page_url, website, existing_recipes, debug, save_to_file, user_agent, timeout) for page_url in page_urls]
+            try:
+                for future in as_completed(futures):
+                    try:
+                        future.result()
+                    except Exception as e:
+                        logger.error(f"Error occurred during scraping: {e}")
+                    if rate_limit_interval:
+                        time.sleep(rate_limit_interval)
+            except KeyboardInterrupt:
+                logger.info("KeyboardInterrupt received, shutting down...")
+                executor.shutdown(wait=False, cancel_futures=True)
+                raise
+    else:
+        scrape_page(website["url"], website, existing_recipes, debug, save_to_file, user_agent, timeout)
+
+def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ignore_existing, max_threads):
     start_time = time.time()
     try:
         if debug:
@@ -39,7 +71,7 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ign
             print(f"{YELLOW}> Duration depends on the number of pages to analyze.{RESET}")
             print(f"{GREEN}> Let's discover some culinary treasures! 🥘🔍{RESET}\n")
             
-        connection = database.create_connection()
+        #connection = database.create_connection()
         # Loading the website config urls.json
         with open("urls.json", 'r') as file:
             website_configs = json.load(file)
@@ -58,24 +90,11 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ign
                 logger.error(f"No website found with the name: {website_name}. Please check the configuration.")
                 return
 
-        if rate_limit:
-            rate_limit_interval = 1.0 / rate_limit
-        
-        for website in websites_to_scrape:
-            logger.info(f"Scraping the following page {website['url']}")
+        rate_limit_interval = 1.0 / rate_limit if rate_limit else None
 
-            if 'pages' in website:
-                for page_num in range(1, website['pages'] + 1):
-                    page_url = f"{website['url']}{website['page_param']}{page_num}"
-                    logger.info(f"Scraping page number {page_num} of {website['pages']}")
-                    scraper.scrap_recipe_overview(page_url, website, existing_recipes, debug, save_to_file, user_agent, timeout)
-                    if rate_limit:
-                        time.sleep(rate_limit_interval)
-            else:
-                scraper.scrap_recipe_overview(website["url"], website, existing_recipes, debug, save_to_file, user_agent, timeout)
-                if rate_limit:
-                    time.sleep(rate_limit_interval)
-                    
+        for website in websites_to_scrape:
+            scrape_website(website, existing_recipes, debug, save_to_file, user_agent, timeout, rate_limit_interval, max_threads)
+
         neue_rezepte = scraper.get_new_recipes_count()
         end_time = time.time()
         elapsed_time = end_time - start_time
@@ -95,10 +114,7 @@ def main(debug, website_name, save_to_file, user_agent, timeout, rate_limit, ign
             notification.send_telegram_notifications(message)
 
     finally:
-        if connection.is_connected():
-            connection.close()
-            logger.info(f"MySQL database connection has closed!")
-
+        
         new_recipes = scraper.get_new_recipes_count()
         logger.info(f"Number of new recipes found: {new_recipes}")
         end_time = time.time()
@@ -122,6 +138,7 @@ if __name__ == '__main__':
     parser.add_argument('--save-to-file', action='store_true', help='Save debug results to a file')
     parser.add_argument('--timeout', type=int, default=10, help='Timeout for HTTP requests in seconds')
     parser.add_argument('--user-agent', type=str, default="FindMyRecipeBot/1.0 (+https://finde-mein-rezept.de/botinfo)", help='Set a custom User-Agent header')
+    parser.add_argument('--max-threads', type=int, default=5, help='Maximum number of threads to use')
     args = parser.parse_args()
 
-    main(args.debug, args.website, args.save_to_file, args.user_agent, args.timeout, args.rate_limit, args.ignore_existing)
+    main(args.debug, args.website, args.save_to_file, args.user_agent, args.timeout, args.rate_limit, args.ignore_existing, args.max_threads)

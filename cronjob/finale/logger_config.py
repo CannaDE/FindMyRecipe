@@ -2,7 +2,7 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from datetime import datetime
 
-def setup_logger(name, log_dir='log', level=logging.INFO):
+def setup_logger(name, log_dir='', level=logging.INFO):
     """Function to setup a logger with console and file handlers."""
     # Create a logger
     logger = logging.getLogger(name)
@@ -12,8 +12,7 @@ def setup_logger(name, log_dir='log', level=logging.INFO):
     if not logger.hasHandlers():
         # Create handlers
         console_handler = logging.StreamHandler()
-        current_date = datetime.now().strftime("%Y-%m-%d")
-        file_handler = TimedRotatingFileHandler(f"{log_dir}/crawler_{current_date}.log", when="midnight", interval=1)
+        file_handler = FileHandler(f"{log_dir}crawler_log.txt")
         file_handler.suffix = "%Y-%m-%d"
 
         # Set level for handlers

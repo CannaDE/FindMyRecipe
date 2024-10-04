@@ -8,44 +8,12 @@
             "type": "html",
             "pages": 29850,
             "selectors": {
-                "recipe": ".kb-teaser-list-item-wrapper.masked-url",
+                "recipe": ".kb-teaser-list-item-wrapper.masked-url a",
                 "ingredients_type": "table",
                 "ingredients": ".jt-ingredients tr",
                 "title": "h2.recipe-head-headline",
                 "description": "p.description",
                 "image": ".scroll-snap-slide img"
-            }
-        },
-        {
-            "name": "WasKochIch.com",
-            "source_id": 4,
-            "url": "https://waskochich.com/kategorien/pasta-rezepte",
-            "type": "plainTableGK",
-            "selectors": {
-                "recipe": ".col-x2s-12.col-sm-6.col-md-6.col-height a",
-                "ingredients": ".ingredient",
-                "title": "h1[itemprop=\"name\"]",
-                "description": "meta[itemprop=\"description\"]",
-                "descriptionMeta": true,
-                "image": "meta[itemprop=\"image\"]",
-                "imageMeta": true,
-                "duration": ".recipe-times span"
-            }
-        },
-        {
-            "name": "WasKochIch.com",
-            "source_id": 4,
-            "url": "https://waskochich.com/kategorien/fleisch-rezepte",
-            "type": "plainTableGK",
-            "selectors": {
-                "recipe": ".col-x2s-12.col-sm-6.col-md-6.col-height a",
-                "ingredients": ".ingredient",
-                "title": "h1[itemprop=\"name\"]",
-                "description": "meta[itemprop=\"description\"]",
-                "descriptionMeta": true,
-                "image": "meta[itemprop=\"image\"]",
-                "imageMeta": true,
-                "duration": ".recipe-times span"
             }
         }
     ]

@@ -16,7 +16,7 @@ new_recipes_count = 0
 logger = setup_logger(__name__)
 
 # function to extract the recipe url from a overview site
-def scrap_recipe_overview(url, website, existing_recipes, debug, save_to_file, user_agent, timeout): 
+def scrap_recipe_overview(_connection, url, website, existing_recipes, debug, save_to_file, user_agent, timeout): 
     global new_recipes_count
     
     header = {
