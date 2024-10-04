@@ -7,7 +7,7 @@ use fmr\system\http\request\RequestHandler;
 use fmr\system\database\Database;
 
 use fmr\system\template\TemplateEngine;
-
+use fmr\system\http\request\RouteHandler;
 class FindMyRecipe {
 
     protected static Database|string $databaseObject = '';
@@ -159,6 +159,10 @@ class FindMyRecipe {
         return self::$templateEngine;
     }
 
+    public static function getPath(): string {
+        return RouteHandler::getProtocol().URL;
+    }
+
     final public static function getActiveRequest()  {
         return (RequestHandler::getInstance()->getActiveRequest() !== null) ? RequestHandler::getInstance()->getActiveRequest() : null;
     }
@@ -223,5 +227,18 @@ class FindMyRecipe {
             return self::$coreObject[$className];
         }
         return null;
+    }
+
+        /**
+     * @inheritDoc
+     */
+    final public function __call($name, array $arguments)
+    {
+        // bug fix to avoid php crash, see http://bugs.php.net/bug.php?id=55020
+        if (!\method_exists($this, $name)) {
+            return self::__callStatic($name, $arguments);
+        }
+
+        throw new \BadMethodCallException("Call to undefined method TimeMonitoring::{$name}().");
     }
 }
