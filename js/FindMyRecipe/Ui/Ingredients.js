@@ -3,11 +3,11 @@ define(["require", "exports"], function(require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.setup = void 0;
 
-    let _ingredientList;
+
     let _selectedIngredients = [];
 
     function setup() {
-        _ingredientList = document.querySelectorAll(".ingredient-list").forEach(list => {
+        document.querySelectorAll(".ingredient-list").forEach(list => {
             let ingredients_btn = list.querySelectorAll(".ingredient-button");
             ingredients_btn.forEach(btn => {
                 btn.addEventListener("click", () => {
