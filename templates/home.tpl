@@ -70,8 +70,10 @@
                 <!-- Neues Input-Feld für Zutaten -->
                 <input type="text" id="ingredientSearch" placeholder="Neue Zutat eingeben" onkeyup="" autocomplete="off">
                 <div id="suggestions"></div>
-
+                <div id="selectedIngredients"></div>
                 <div class="alert info"><span class="fa fa-info-circle"></span>Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</div>
+
+                <div id="selectedIngredients"></div>
 
                 {assign var="ingredientCategoryCounter" value=0}
                 {foreach from=$ingredients item=category key=key}
@@ -86,7 +88,6 @@
                 </div>
                 {assign var="ingredientCategoryCounter" value=$ingredientCategoryCounter+1}
                 {/foreach}
-                <div id="selectedIngredients"></div>
                 
             </div> 
         </div>
@@ -105,25 +106,6 @@
     </div>
 
     <script>
-        let selectedIngredients = [];
-
-        window.onload = function() {
-            document.querySelectorAll('.ingredient-button').forEach(button => {
-                button.addEventListener('click', () => toggleIngredient(button, button.innerText));
-            });
-        }
-
-        function toggleIngredient(element, ingredient) {
-            if (selectedIngredients.includes(ingredient)) {
-                selectedIngredients = selectedIngredients.filter(item => item !== ingredient);
-                element.classList.remove('active');
-            } else {
-                selectedIngredients.push(ingredient);
-                element.classList.add('active');
-            }
-            console.log(selectedIngredients);
-            getRecipes();
-        }
         
         function fetchSuggestions() {
             const input = document.getElementById('ingredientSearch').value;
@@ -143,15 +125,6 @@
             xhr.send();
         }
         
-        function selectIngredient(ingredient) {
-            if (!selectedIngredients.includes(ingredient)) {
-                selectedIngredients.push(ingredient);
-                updateSelectedIngredients();
-            }
-            document.getElementById('ingredientSearch').value = '';
-            document.getElementById('suggestions').innerHTML = '';
-        }
-        
         function updateSelectedIngredients() {
             const container = document.getElementById('selectedIngredients');
             container.innerHTML = '';
@@ -163,11 +136,6 @@
                 ingredientDiv.onclick = () => removeIngredient(ingredient);
                 container.appendChild(ingredientDiv);
             });
-        }
-        
-        function removeIngredient(ingredient) {
-            selectedIngredients = selectedIngredients.filter(i => i !== ingredredient);
-            updateSelectedIngredients();
         }
 
         function getRecipes() {

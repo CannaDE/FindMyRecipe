@@ -42,6 +42,10 @@ html[data-color-sheme="light"] .success {
     border-radius: 5px;
 }
 
+#selectedIngredients {
+    margin-top: 20px;
+}
+
 html[data-color-sheme="light"] .info {
     background-color: rgba(217, 237, 247, 1);
     border-color: rgba(188, 223, 241, 1);
@@ -377,7 +381,6 @@ input[type="text"]:focus {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 20px;
 }
 
 .selected-ingredient {

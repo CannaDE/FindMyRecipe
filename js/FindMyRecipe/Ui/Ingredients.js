@@ -4,9 +4,23 @@ define(["require", "exports"], function(require, exports) {
     exports.setup = void 0;
 
     let _ingredientList;
+    let _selectedIngredients = [];
+
     function setup() {
         _ingredientList = document.querySelectorAll(".ingredient-list").forEach(list => {
-            let ingredients = Array.from(list.querySelectorAll(".ingredient-button"));
+            let ingredients_btn = list.querySelectorAll(".ingredient-button");
+            ingredients_btn.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    if(_selectedIngredients.includes(btn.innerText)) {
+                        removeIngredient(btn.innerText);
+                        btn.classList.remove("active");
+                    } else {
+                        addIngredient(btn.innerText);
+                        btn.classList.add("active");
+                    }
+                })
+            })
+            let ingredients = Array.from(ingredients_btn);
             let maxVisibles = Math.floor(Math.random() * (14 - 8 + 1)) + 8;
             let disableIngredients = 0;
             ingredients.forEach((ingredient, index) => {
@@ -24,6 +38,7 @@ define(["require", "exports"], function(require, exports) {
                 _toggleIngredients(btn.dataset.listId);
             });
         })
+        loadSelectedIngredients();
     }
     exports.setup = setup;
 
@@ -51,5 +66,57 @@ define(["require", "exports"], function(require, exports) {
             showMoreBtn.innerText = "weniger";
         }
         showMoreBtn.setAttribute("data-expanded", !isExpanded);
+    }
+
+    function updateSelectedIngredients() {
+        const container = document.getElementById("selectedIngredients");
+        container.innerHTML = "";
+
+        _selectedIngredients.forEach(ingredient => {
+            const ingredientDiv = document.createElement('div');
+            ingredientDiv.className = 'selected-ingredient';
+            ingredientDiv.innerText = ingredient;
+            ingredientDiv.onclick = () => removeIngredient(ingredient);
+            container.appendChild(ingredientDiv);
+            document.querySelectorAll('.ingredient-button').forEach(element => {
+                if (element.innerText === ingredient) {
+                    element.classList.add("active");
+                }
+            })
+        })
+    }
+
+    function addIngredient(ingredient) {
+        _selectedIngredients.push(ingredient);
+        document.querySelectorAll('.ingredient-button').forEach(element => {
+            if (element.innerText === ingredient) {
+                element.classList.add("active");
+            }
+        })
+        saveSelectedIngredients();
+        updateSelectedIngredients();
+    }
+
+    function removeIngredient(ingredient) {
+        _selectedIngredients = _selectedIngredients.filter(item => item !== ingredient);
+        document.querySelectorAll('.ingredient-button').forEach(btn => {
+            if (btn.innerText === ingredient) {
+                btn.classList.remove("active");
+            }
+        })
+        saveSelectedIngredients();
+        updateSelectedIngredients();
+    }
+
+    function saveSelectedIngredients() {
+        localStorage.setItem("selectedIngredients", JSON.stringify(_selectedIngredients));
+    }
+
+    function loadSelectedIngredients() {
+        const storedIngredients = localStorage.getItem("selectedIngredients");
+        if(storedIngredients) {
+            _selectedIngredients = JSON.parse(storedIngredients);
+            updateSelectedIngredients();
+        }
     }
 });
