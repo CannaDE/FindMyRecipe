@@ -31,6 +31,16 @@ jobs:
           echo "define('DEPLOY_BRANCH', '${GITHUB_REF##*/}');" >> global.php
           echo "define('DEPLOY_COMMIT', '${GITHUB_SHA}');" >> global.php
 
+      - name: ✏️ Update admin files
+        run: |
+          echo "DEPLOY_DATE=$(date -u '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+          sed -i "s/branch: development<br />/branch: ${GITHUB_REF##*/}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/index.php
+          sed -i "s/commit: aaa89d022e119ebe23478079f227686e76e0870c<br />/commit: ${GITHUB_SHA}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/index.php          
+          sed -i "s/deploy date: DATUM<br />/deploy date: ${{ env.DEPLOY_DATE }}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/index.php
+          sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/deduplicate_ingredients.php
+          sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/duplicates_ingredients.php
+          sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/manage_ingredients.php
+      
       - name: ✏️ Update python settings
         run: |
           sed -i "s/database='rezept'/database='${{ secrets.MYSQL_DATABASENAME }}'/" cronjob/finale/database.py
@@ -38,8 +48,8 @@ jobs:
           sed -i "s/password=''/password='${{ secrets.MYSQL_PASSWORD }}'/" cronjob/finale/database.py
           sed -i 's|with open("urls.json", '\''r'\'') as file:|with open("www/finde-mein-rezept.de/cronjob/finale/urls.json", '\''r'\'') as file:|' cronjob/finale/main.py
 
-      - name: 🔁 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.3.5
+      - name: 🔁 Sync files with FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: dev1.morvai-systems.de
           username: ${{ secrets.FTP_USERNAME }}
@@ -81,12 +91,22 @@ jobs:
           echo "define('DEPLOY_BRANCH', '${GITHUB_REF##*/}');" >> global.php
           echo "define('DEPLOY_COMMIT', '${GITHUB_SHA}');" >> global.php
 
+      - name: ✏️ Update admin files
+        run: |
+          echo "DEPLOY_DATE=$(date -u '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+          sed -i "s/branch: development<br />/branch: ${GITHUB_REF##*/}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/index.php
+          sed -i "s/commit: aaa89d022e119ebe23478079f227686e76e0870c<br />/commit: ${GITHUB_SHA}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/index.php          
+          sed -i "s/deploy date: DATUM<br />/deploy date: ${{ env.DEPLOY_DATE }}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/index.php
+          sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/deduplicate_ingredients.php
+          sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/duplicates_ingredients.php
+          sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/manage_ingredients.php
+      
       - name: ✏️ Update python settings
         run: |
           sed -i "s/database='rezept'/database='${{ secrets.MYSQL_DATABASENAME }}'/" cronjob/finale/database.py
           sed -i "s/user='root'/user='${{ secrets.MYSQL_USERNAME }}'/" cronjob/finale/database.py
           sed -i "s/password=''/password='${{ secrets.MYSQL_PASSWORD }}'/" cronjob/finale/database.py
-          sed -i 's|with open("urls.json", '\''r'\'') as file:|with open("www/dev.finde-mein-rezept.de/cronjob/finale/urls.json", '\''r'\'') as file:|' cronjob/finale/main.py
+          sed -i 's|with open("urls.json", '\''r'\'') as file:|with open("www/finde-mein-rezept.de/cronjob/finale/urls.json", '\''r'\'') as file:|' cronjob/finale/main.py
 
       - name: 🔁 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
