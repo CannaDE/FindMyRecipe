@@ -96,9 +96,9 @@ jobs:
 
       - name: ✏️ Update admin files
         run: |
-          sed -i "s/branch: development<br />/branch: ${GITHUB_REF##*/}<br />/" admin/index.php
-          sed -i "s/commit: aaa89d022e119ebe23478079f227686e76e0870c<br />/commit: ${GITHUB_SHA}<br />/" admin/index.php          
-          sed -i "s/deploy date: DATUM<br />/deploy date: ${{ env.DEPLOY_DATE }}/" admin/index.php
+          sed -i 's/branch: development<br \/>/branch: ${GITHUB_REF##*/}<br \/>/' admin/index.php
+          sed -i 's/commit: aaa89d022e119ebe23478079f227686e76e0870c<br \/>/commit: ${GITHUB_SHA}<br \/>/' admin/index.php          
+          sed -i 's/deploy date: DATUM<br \/>/deploy date: ${{ env.DEPLOY_DATE }}/' admin/index.php
           sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/deduplicate_ingredients.php
           sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/duplicates_ingredients.php
           sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/manage_ingredients.php
