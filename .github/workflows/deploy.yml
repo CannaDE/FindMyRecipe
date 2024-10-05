@@ -81,6 +81,9 @@ jobs:
         with:
           php-version: '8.1'
 
+      - name: Get current date and time
+        run: echo "DEPLOY_DATE=$(date -u '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+
       - name: ✏️ Update global.php
         run: |
           sed -i "s/define('DOMAIN_NAME', 'rezept.test');/define('DOMAIN_NAME', 'dev.finde-mein-rezept.de');/" global.php
@@ -93,7 +96,6 @@ jobs:
 
       - name: ✏️ Update admin files
         run: |
-          echo "DEPLOY_DATE=$(date -u '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
           sed -i "s/branch: development<br />/branch: ${GITHUB_REF##*/}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/index.php
           sed -i "s/commit: aaa89d022e119ebe23478079f227686e76e0870c<br />/commit: ${GITHUB_SHA}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/index.php          
           sed -i "s/deploy date: DATUM<br />/deploy date: ${{ env.DEPLOY_DATE }}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/index.php
