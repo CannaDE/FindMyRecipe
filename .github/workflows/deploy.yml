@@ -96,18 +96,21 @@ jobs:
 
       - name: ✏️ Update admin files
         run: |
-          sed -i 's/branch: development<br \/>/branch: ${GITHUB_REF##*\/}<br \/>/' admin/index.php
-          sed -i 's/commit: aaa89d022e119ebe23478079f227686e76e0870c<br \/>/commit: ${GITHUB_SHA}<br \/>/' admin/index.php          
+          sed -i "s/branch: development<br \/>/branch: ${GITHUB_REF##*/}<br \/>/" admin/index.php
+          sed -i "s/commit: aaa89d022e119ebe23478079f227686e76e0870c<br \/>/commit: ${GITHUB_SHA}<br \/>/" admin/index.php
           sed -i 's/deploy date: DATUM<br \/>/deploy date: ${{ env.DEPLOY_DATE }}<br \/>/' admin/index.php
           sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/deduplicate_ingredients.php
           sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/duplicates_ingredients.php
           sed -i "s/$conn = new mysqli("localhost", "root", "", "rezept");/$conn = new mysqli("localhost", "${{ secrets.MYSQL_USERNAME}}", "${{ secrets.MYSQL_PASSWORD}}", "${{ secrets.MYSQL_DATABASENAME}}");/" admin/manage_ingredients.php
-      
+          sed -i "s/$telegramToken = "7831049878:AAGb8DGiZAV7JgtRZyseR__13mutlvl797Q";/$telegramToken = "8055605849:AAFoZIFir5qT5i-934FzIKy06aL8G3S2xpI";/" admin/index.php
+     
+
       - name: ✏️ Update python settings
         run: |
           sed -i "s/database='rezept'/database='${{ secrets.MYSQL_DATABASENAME }}'/" cronjob/finale/database.py
           sed -i "s/user='root'/user='${{ secrets.MYSQL_USERNAME }}'/" cronjob/finale/database.py
           sed -i "s/password=''/password='${{ secrets.MYSQL_PASSWORD }}'/" cronjob/finale/database.py
+          sed -i "s/telegramToken = "7831049878:AAGb8DGiZAV7JgtRZyseR__13mutlvl797Q";/telegramToken = "8055605849:AAFoZIFir5qT5i-934FzIKy06aL8G3S2xpI";/" cronjob/recipecrawler/notifications.py
           sed -i 's|with open("urls.json", '\''r'\'') as file:|with open("www/finde-mein-rezept.de/cronjob/finale/urls.json", '\''r'\'') as file:|' cronjob/finale/main.py
 
       - name: 🔁 Sync files
