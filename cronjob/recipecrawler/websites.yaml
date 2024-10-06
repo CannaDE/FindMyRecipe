@@ -1,0 +1,68 @@
+websites:
+  - name: Grillsportverein
+    url: https://www.grillsportverein.de/grillrezepte/alle-rezepte
+    selectors:
+      recipe_link: "a.post-item::attr(href)"
+      next_page: "a.page-link[rel='next']::attr(href)"
+      title: ".post h1"
+      image: ".post-gallery img.img-fluid::attr(src)"
+      ingredients: "ul.list-unstyled.list-ingred li"
+      description: ".mobile-wrap p"
+  - name: Rezeptwelt
+    url: https://www.rezeptwelt.de/suche?sort=created
+    selectors:
+      recipe_link: "a.recipe-link::attr(href)"
+      next_page: "a.page-link.icon-arrow-right::attr(href)"
+      title: "meta[itemprop='name']::attr(content)"
+      image: "img.recipe-main-image::attr(src)"
+      ingredients: "li[itemprop='recipeIngredient']"
+      description: "div.recipe-head-description::text"
+  - name: Kochbar
+    url: https://www.kochbar.de/rezepte/alle-rezepte.html
+    selectors:
+      recipe_link: "div.kb-teaser-list-item-wrapper.masked-url::attr(data-url)"
+      next_page: "div.kb-pagination-container li:last-child span.masked-url::attr(data-url)"
+      title: "h2.recipe-head-headline::text"
+      image: ".scroll-snap-slide img::attr(src)"
+      ingredients: ".jt-ingredients tr span"
+      description: "p.description"
+  - name: IchKoche
+    url: https://www.ichkoche.at/rezepte-az/a
+    selectors:
+      recipe_link: "article.box h3 a::attr(href)"
+      next_page: "div.icon_rpl.arrow_right_icon.button-arrows-pagination::attr(onclick)"
+      title: "h1.page_title::text"
+      image: ".image_wrap img::attr(src)"
+      ingredients: "div.line-clamp-1.text-base.font-medium"
+      description: "p.description::text"
+      duration: "button.compact::text"
+  - name: IchKoche
+    url: https://www.ichkoche.at/rezepte-az/b
+    selectors:
+      recipe_link: "article.box h3 a::attr(href)"
+      next_page: "div.icon_rpl.arrow_right_icon.button-arrows-pagination::attr(onclick)"
+      title: "h1.page_title::text"
+      image: ".image_wrap img::attr(src)"
+      ingredients: "div.line-clamp-1.text-base.font-medium"
+      description: "p.description::text"
+      duration: "button.compact::text"
+  - name: IchKoche
+    url: https://www.ichkoche.at/rezepte-az/c
+    selectors:
+      recipe_link: "article.box h3 a::attr(href)"
+      next_page: "div.icon_rpl.arrow_right_icon.button-arrows-pagination::attr(onclick)"
+      title: "h1.page_title::text"
+      image: ".image_wrap img::attr(src)"
+      ingredients: "div.line-clamp-1.text-base.font-medium"
+      description: "p.description::text"
+      duration: "button.compact::text"
+  - name: IchKoche
+    url: https://www.ichkoche.at/rezepte-az/d
+    selectors:
+      recipe_link: "article.box h3 a::attr(href)"
+      next_page: "div.icon_rpl.arrow_right_icon.button-arrows-pagination::attr(onclick)"
+      title: "h1.page_title::text"
+      image: ".image_wrap img::attr(src)"
+      ingredients: "div.line-clamp-1.text-base.font-medium"
+      description: "p.description::text"
+      duration: "button.compact::text"

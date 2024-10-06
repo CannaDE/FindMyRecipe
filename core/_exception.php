@@ -388,7 +388,7 @@
             } else {
                 echo $e->getMessage();
             } ?></h2>
-            <span class="" style="color: #1f1f1f;">Interner Fehlercode: <span class="exceptionInlineCodeWrapper"><span class="exceptionInlineCode bg-exceptionInlineCode"><?php echo $exceptionID ?></span></span></span>
+            <span class="" style="color: #1f1f1f;">Interner Fehlercode: <span class="exceptionInlineCodeWrapper"><span class="exceptionInlineCode bg-exceptionInlineCode"><?php echo "test" ?></span></span></span>
 
         </div>
         <div class="card header-card" data-card-height="105">
@@ -516,7 +516,7 @@
 
                             <div class="col-md-2 mt-2">
                                 <p class="exceptionFieldTitle"><span class=" color-red-dark">Fehlercode</span><span class="exceptionColon">:</span><br />
-                                    <span href="#" class="exceptionInlineCode" style="color: #727272; padding: 3px 3px; background-color: #f0f0f0;"><?php echo $exceptionID; ?></span>
+                                    <span href="#" class="exceptionInlineCode" style="color: #727272; padding: 3px 3px; background-color: #f0f0f0;"><?php echo "6767"; ?></span>
                             </div>
 
                             <div class="clearfix"></div>

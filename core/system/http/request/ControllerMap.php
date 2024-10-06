@@ -3,6 +3,7 @@
 namespace fmr\system\http\request;
 
 use fmr\system\exception\SystemException;
+use fmr\system\exception\IllegalLinkException;
 use fmr\Singleton;
 
 /**
@@ -45,14 +46,13 @@ final class ControllerMap extends Singleton {
         }
 
         $classData = $this->getLegacyClassData($controller);
-
+        
         if ($classData === null) {
             $parts = explode('-', $controller);
             $parts = array_map('ucfirst', $parts);
             $controller = implode('', $parts);
 
             $classData = $this->getClassData($controller,'page');
-
             if ($classData === null) {
                 $classData = $this->getClassData($controller, 'form');
             }
@@ -62,7 +62,7 @@ final class ControllerMap extends Singleton {
         }
 
         if ($classData === null)
-            throw new SystemException("Unknown controller '" . $controller . "'");
+            throw new IllegalLinkException();
 
         return $classData;
     }
@@ -164,7 +164,6 @@ final class ControllerMap extends Singleton {
         $className = "fmr\\" . $pageType . '\\' . $controller . \ucfirst($pageType);
 
         if (!class_exists($className)) {
-            cfwDebug($className);
             return null;
         }
 

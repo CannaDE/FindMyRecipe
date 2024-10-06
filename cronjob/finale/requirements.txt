@@ -1,0 +1,6 @@
+requests==2.26.0
+beautifulsoup4==4.10.0
+mysql-connector-python==8.0.26
+colorama==0.4.4
+argparse==1.4.0
+logging==0.5.1.2

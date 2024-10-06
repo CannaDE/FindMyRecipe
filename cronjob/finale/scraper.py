@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import logging
 import utils
 import database
+from logger_config import setup_logger
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -11,18 +12,20 @@ BLUE = "\033[34m"
 CYAN = "\033[36m"
 RESET = "\033[0m"
 
+new_recipes_count = 0
+logger = setup_logger(__name__)
 
 # function to extract the recipe url from a overview site
-def scrap_recipe_overview(url, website, existing_recipes): 
-    new_recipes_count = 0
+def scrap_recipe_overview(_connection, url, website, existing_recipes, debug, save_to_file, user_agent, timeout): 
+    global new_recipes_count
     
     header = {
-        'User-Agent': "FindMyRecipeBot/1.0 (+https://finde-mein-rezept.de/botinfo)"
+        'User-Agent': user_agent
     }
-    response = requests.get(url, headers=header)
+    response = requests.get(url, headers=header, timeout=timeout)
 
     if response.status_code != 200:
-        logging.error(f"{RED} Error when calling up the overview page. [{response.status_code}]")
+        logger.error(f"Error when calling up the overview page. [{response.status_code}]")
         return []
     
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -42,23 +45,35 @@ def scrap_recipe_overview(url, website, existing_recipes):
             response = requests.get(link, headers=header)
 
             if response.status_code != 200:
-                print(f"{RED} Error when calling up the recipe page. {RESET}{link} {RED}[{response.status_code}]{RESET}")
+                logger.error(f"Error when calling up the recipe page. {link} [{response.status_code}]")
                 continue
 
             soup = BeautifulSoup(response.content, 'html.parser')
             title, description, image_url, ingredients = parse_recipe(soup, website)
-            print(f"{GREEN}A new recipe was found {RESET}   {title}")
+            logger.info(f"A new recipe was found    {title}")
             
-            recipe_id = database.insert_recipe(title, description, website['source_id'], link, image_url)
-            for ingredient in ingredients:
-                ingredient_id = database.get_or_create_ingredient(ingredient)
-                database.insert_recipe_ingredient(recipe_id, ingredient_id)
+            if not debug:
+                recipe_id = database.insert_recipe(title, description, website['source_id'], link, image_url)
+                for ingredient in ingredients:
+                    ingredient_id = database.get_or_create_ingredient(ingredient)
+                    database.insert_recipe_ingredient(recipe_id, ingredient_id)
+            else:
+                print(f"{GREEN}Description: {RESET}{description}")
+                print(f"{GREEN}Image URL: {RESET}{image_url}")
+                print(f"{GREEN}Ingredients: {RESET}{ingredients}")
+                if save_to_file:
+                    with open("log/debug.txt", 'a') as f:
+                        f.write(f"Title: {title}\n")
+                        f.write(f"Description: {description}\n")
+                        f.write(f"Image URL: {image_url}\n")
+                        f.write(f"Ingredients: {ingredients}\n\n")
             new_recipes_count += 1
         except Exception as e:
-            print(f"Error scraping {website['name']}: {e}")
+            logger.error(f"Error scraping {website['name']}: {e}")
+
+# Funktion, um die bestehende Verbindung zu erhalten
+def get_new_recipes_count():
     return new_recipes_count
-
-
 
 def parse_recipe(soup, config):
     type_mapping = {
