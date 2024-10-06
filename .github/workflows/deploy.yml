@@ -36,7 +36,7 @@ jobs:
           sed -i "s/database='rezept'/database='${{ secrets.MYSQL_DATABASENAME }}'/" cronjob/finale/database.py
           sed -i "s/user='root'/user='${{ secrets.MYSQL_USERNAME }}'/" cronjob/finale/database.py
           sed -i "s/password=''/password='${{ secrets.MYSQL_PASSWORD }}'/" cronjob/finale/database.py
-          sed -i 's|with open("urls.json", '\''r'\'') as file:|with open("www/dev.finde-mein-rezept.de/cronjob/finale/urls.json", '\''r'\'') as file:|' cronjob/finale/main.py
+          sed -i 's|with open("urls.json", '\''r'\'') as file:|with open("www/finde-mein-rezept.de/cronjob/finale/urls.json", '\''r'\'') as file:|' cronjob/finale/main.py
 
       - name: 🔁 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
