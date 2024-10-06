@@ -100,6 +100,20 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateIngredientName') {
     exit;
 }
 
+// Ajax-Anfrage zum Löschen einer Zutat
+if (isset($_POST['action']) && $_POST['action'] == 'deleteIngredient') {
+    $ingredient_id = $_POST['remove_id'];
+
+    $sql = "DELETE FROM fmr_basic_ingredients WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $ingredient_id);
+    $result = $stmt->execute();
+
+    echo json_encode(['success' => $result]);
+    exit;
+}
+
+
 $ingredients = getIngredients($conn);
 $categories = getCategories($conn);
 ?>
@@ -113,6 +127,43 @@ $categories = getCategories($conn);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+    <style>
+        .toast {
+            visibility: hidden;
+            max-width: 50%;
+            margin: 0 auto;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 30px;
+            font-size: 17px;
+            transform: translateX(-50%);
+        }
+
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {top: 0; opacity: 0;}
+            to {top: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {top: 30px; opacity: 1;}
+            to {top: 0; opacity: 0;}
+        }
+
+        .delete:hover {
+            cursor: pointer;
+        }
+    </style>
 <body class="bg-gray-100 min-h-screen max-h-screen">
     <div class="container mx-auto px-4 py-8">
         <div class="bg-white rounded-lg shadow-md p-6">
@@ -139,7 +190,8 @@ $categories = getCategories($conn);
                 <table class="w-full">
                     <thead>
                         <tr class="bg-gray-200 sticky top-0">
-                            <th class="text-left">Zutat</th>
+                            <th class="text-center">#</th>
+                            <th class="text-center">Zutat</th>
                             <?php foreach ($categories as $category): ?>
                                 <th class="p-2 text-center"><?php echo htmlspecialchars($category['name']); ?></th>
                             <?php endforeach; ?>
@@ -148,6 +200,13 @@ $categories = getCategories($conn);
                     <tbody>
                         <?php foreach ($ingredients as $ingredient): ?>
                             <tr data-ingredient-id="<?php echo $ingredient['id']; ?>" class="border-b <?php echo empty($ingredient['categories']) ? 'bg-red-100' : ''; ?>">
+                                <td class="p-2">
+                                    <div class="delete" style="color: red;" title="Zutat löschen" data-ingredient-id="<?php echo $ingredient['id']; ?>" data-ingredient-name="<?php echo $ingredient['name']; ?>">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    </div>
+                                </td>
                                 <td class="p-2">
                                     <span class="ingredient-name cursor-pointer hover:underline" data-ingredient-id="<?php echo $ingredient['id']; ?>">
                                         <?php echo htmlspecialchars($ingredient['name']); ?>
@@ -209,22 +268,58 @@ $categories = getCategories($conn);
                 });
             });
 
+            $('.delete').click(function() {
+                var div = $(this);
+                var ingredient_id = div.data('ingredient-id');
+                var ingredient_name = div.data('ingredient-name');
+                modal.show(
+                    'Mach kein Scheiß, diggi!',
+                    'Bist du dir sicher, dass du die Zutat <b>' + ingredient_name + '</b> löschen möchtest?<br /><hr class="mt-2 mb-2"/>\
+                    <span class="text-red-500 font-bold text-xs">Beachte bitte die Rezepte, die diese Zutat enthalten! Sollte es eine relevante\
+                    Zutat sein, musst du diese mit einer anderen Zutat zusammenführen!</span>',
+                    function() {
+                        $.ajax({
+                            url: 'manage_ingredients.php',
+                            method: 'POST',
+                            data: {
+                                action: 'deleteIngredient',
+                                remove_id: ingredient_id
+                            },
+                            success: function(response) {
+                                var result = JSON.parse(response);
+                                if (result.success) {
+                                    showToast('Zutate ' + ingredient_name + ' wurde gelöscht');
+                                    var row = $('tr[data-ingredient-id="' + ingredient_id + '"]');
+                                    row.remove();
+                                } else {
+                                    showToast('Fehler: ' + result.error, false);
+                                }
+                            },
+                            error: function() {
+                                showToast('Ein Fehler ist aufgetreten', false);
+                            }
+                        });
+                    }
+                )
+
+            });
+
             $('.ingredient-name').click(function() {
                 var span = $(this);
                 var ingredient_id = span.data('ingredient-id');
-                var current_name = span.text();
+                var current_name = span.text().trim();
                 var input = $('<input type="text" class="border p-1 w-full">').val(current_name);
                 
                 span.hide().after(input);
                 input.focus();
 
                 input.blur(function() {
-                    updateIngredientName(ingredient_id, input.val(), span, input);
+                    updateIngredientName(ingredient_id, input.val().trim(), span, input);
                 });
 
                 input.keypress(function(e) {
                     if (e.which == 13) {
-                        updateIngredientName(ingredient_id, input.val(), span, input);
+                        updateIngredientName(ingredient_id, input.val().trim(), span, input);
                     }
                 });
             });
@@ -242,15 +337,16 @@ $categories = getCategories($conn);
                         var result = JSON.parse(response);
                         if (result.success) {
                             span.text(new_name).show();
+                            showToast('Zutat wurde unbenannt');
                             input.remove();
                         } else {
-                            alert('Fehler beim Aktualisieren des Zutatennamen');
+                            showToast('Fehler beim Aktualisieren des Zutatennamen', false);
                             span.show();
                             input.remove();
                         }
                     },
                     error: function() {
-                        alert('Ein Fehler ist aufgetreten');
+                        showToast('Ein Fehler ist aufgetreten', false);
                         span.show();
                         input.remove();
                     }
@@ -292,7 +388,22 @@ $categories = getCategories($conn);
                     }
                 });
             }
+
+            function showToast(message, isSuccess = true) {
+                var toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.style.backgroundColor = isSuccess ? '#4CAF50' : '#f44336'; // Grün für Erfolg, Rot für Fehler
+                toast.innerText = message;
+                document.body.appendChild(toast);
+
+                toast.className += ' show';
+                setTimeout(function() {
+                    toast.className = toast.className.replace(' show', '');
+                    document.body.removeChild(toast);
+                }, 3000);
+            }
         });
     </script>
+    <script src="modal.js"></script>
 </body>
 </html>
