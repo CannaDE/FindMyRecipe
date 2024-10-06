@@ -35,6 +35,7 @@ define(["require", "exports", "tslib", "Ui/Screen", "Ui/Overlay", "Dom/Util", "D
                 }
             }, { passive: false });
 
+            console.log(document.getElementById("page"))
             document.getElementById("page").appendChild(_container);
 
             _keyupListener = (event) => {

@@ -11,17 +11,18 @@ define(["require", "exports", "tslib", "Environment", "Ui/Notification", "Ui/Dia
         });
 
         Environment.setup();
-        Notification.show("Das ist ein Test");
+        //Notification.show("Das ist ein Test");
         Dialog.default.setup();
         Tooltip.setup();
-
-        
+        setThemeBasedOnSystemPreference();
 
         if(Environment.browser() === "microsoft") {
             window.onbeforeunload = () => {
                 /* Prevent "Back navigation caching" (http://msdn.microsoft.com/en-us/library/ie/dn265017%28v=vs.85%29.aspx) */
             };
         }
+
+        
     }
     exports.setup = setup;   
 

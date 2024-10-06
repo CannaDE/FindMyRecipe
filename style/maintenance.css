@@ -7,8 +7,105 @@ body, html {
     justify-content: center;
     align-items: center;
     background-color: #f5f5f5;
-    background-image: url('https://www.supercook.com/statics/images/vegetable_pattern.svg');
 }
+
+.color-brand-green {
+    color:rgb(117 197 24) !important;
+}
+.color-brand-orange {
+    color: rgba(245, 99, 9, 1) !important;
+}
+
+p.info, p.success, p.error, p.warning {
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+/* Light Theme */
+/* LIGHT THEME DEFAULT */
+html[data-color-sheme="light"] body, html[data-color-sheme="light"] #preloader{
+    background-color: #f4f4f4;
+}
+html[data-color-sheme="light"] .success {
+    background-color: rgba(223, 240, 216, 1);
+    border-color: rgba(208, 233, 198, 1);
+    color: rgba(60, 118, 61, 1);
+}
+
+#preloader {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 99999;
+    transition: all 200ms ease;
+}
+
+
+#preloader .spinner-border {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -15px;
+}
+
+.preloader-hide {
+    opacity: 0;
+    pointer-events: none;
+    transition: all 200ms ease;
+}
+
+.spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: -.125em;
+    border: .25em solid #28a745;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: .75s linear infinite spinner-border;
+}
+
+
+#jsNotificationToast {
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    transform: translateY(-100%);
+    transition: visibility 0.12s linear 0.12s, transform 0.12s linear, opacity 0.12s linear;
+    visibility: hidden;
+    width: 100%;
+    z-index: 400;
+}
+
+#jsNotificationToast > p {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-width: 0;
+    cursor: pointer;
+    display: table;
+    margin: 0 auto;
+    max-width: 80%;
+    pointer-events: auto;
+    padding: 10px 20px;
+}
+
+#jsNotificationToast.active {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0s;
+    visibility: visible;
+}
+
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+    }
 
 .container {
     display: flex;
@@ -16,11 +113,14 @@ body, html {
     max-width: 1200px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 .image-container {
     flex: 1;
     min-height: 400px;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
 }
 .image-container.maintenance {
     background-image: url('../images/cooking.jpg');
@@ -33,7 +133,7 @@ body, html {
     background-position: top;
 }
 .divider {
-    border-top: 1px solid #28a745;
+    border-top: 1px solid rgba(245, 99, 9, 1);
     width: 50px;
     margin: 0 auto;
 }

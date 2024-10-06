@@ -1,0 +1,42 @@
+html[data-color-sheme="dark"] body, html[data-color-sheme="dark"], [data-color-sheme="dark"] .container, [data-color-sheme="dark"] #preloader {
+    background-color: rgba(26, 29, 33, 1);
+}
+[data-color-sheme="dark"] #preloader {
+    background-color: rgba(26, 29, 32, 1);
+}
+html[data-color-sheme="dark"] .container {
+    box-shadow: 1px 1px 15px 15px rgba(0, 0, 0, 0.1);
+    background-color: rgb(26, 29, 33, 0.8);
+}
+html[data-color-sheme="dark"] h1 {
+    color: rgba(209, 210, 211, 1)
+}
+html[data-color-sheme="dark"] h2 {
+    color:rgb(88 139 28);
+}
+html[data-color-sheme="dark"] p {
+    color: rgba(255, 255, 255, 0.67);
+}
+html[data-color-sheme="dark"] .success {
+    background-color: rgba(0, 94, 70, 1);
+    border-color: rgba(0, 113, 84, 1);
+    color: rgba(180, 203, 195, 1);
+}
+
+html[data-color-sheme="dark"] .info, html[data-color-sheme="dark"] .info-box {
+    background-color: rgba(12, 81, 92, 1);
+    border-color: rgba(14, 97, 110, 1);
+    color: rgba(171, 191, 196, 1);
+}
+
+html[data-color-sheme="dark"] .error {
+    background-color: rgba(116, 38, 30, 1);
+    border-color: rgba(139, 46, 36, 1);
+    color: rgba(201, 170, 165, 1);
+}
+
+html[data-color-sheme="dark"] .warning {
+    background-color: rgba(122, 78, 9, 1);
+    border-color: rgba(146, 94, 11, 1);
+    color: rgba(221, 209, 194, 1);
+}
