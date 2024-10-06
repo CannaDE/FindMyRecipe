@@ -98,7 +98,6 @@
 🏢 ISP: " . $userInfo['whois_info']['isp'] . "
 ";
                 sendTelegramNotification($message);
-                sendTelegramNotification($message);
             } else {
                 echo "Kein Benutzer angemeldet.";
             }
