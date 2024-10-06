@@ -53,8 +53,7 @@
         $apiUrl = "https://ipinfo.io/{$ip}/json?token=44f6aadeaf25f0";
         $response = file_get_contents($apiUrl);
         $data = json_decode($response, true);
-
-        if ($data && $data['status'] === 'success') {
+        if ($data) {
             return [
                 'country' => $data['country'] ?? 'Unbekannt',
                 'region' => $data['region'] ?? 'Unbekannt',
