@@ -1,110 +1,4 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Botinfo - Finde-Mein-Rezept.de</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: center;
-        }
-      	.divider {
-    		border-top: 1px solid #28a745;
-   			width: 50px;
-    		margin: 0 auto;
-		}
-        .container {
-            display: flex;
-            flex-direction: column;
-            width: 80%;
-            max-width: 1200px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-
-        .header-image {
-            position: relative;
-            width: 100%;
-            height: 150px;
-            background-image: url('../images/cooking.jpg'); /* Verwende hier den Pfad zu deinem Bild */
-            background-size: cover;
-            background-position: center;
-        }
-
-        .header-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-size: 30px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: center;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        h1 {
-            margin-top: 0;
-            font-size: 36px;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        h2, a {
-            color: #2C3E50;
-        }
-        a { 
-            text-decoration: none; 
-            }
-
-        p {
-            font-size: 17px;
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        footer {
-            margin-top: 20px;
-            text-align: center;
-            color: #888;
-            font-size: 14px;
-        }
-      
-              .info-box {
-
-            padding: 15px;
-
-            background-color: #e9f7f6;
-
-            border-left: 4px solid #4BB5C1;
-
-            margin-bottom: 20px;
-               } 
-
-        @media (max-width: 768px) {
-            .container {
-                width: 90%;
-            }
-
-            .header-text {
-                font-size: 24px;
-            }
-        }
-    </style>
-</head>
-<body>
+{include file="header"}
 <div class="container">
         <!-- Header mit Bild und Überschrift -->
         <div class="header-image">
@@ -113,6 +7,7 @@
 
         <!-- Inhaltsbereich -->
         <div class="content">
+            <div class="divider"></div>
             <p>
              Auf nachfolgender Seite möchten wir dir erklären, wie unser Bot arbeitet, welche Daten er sammelt und wie wir sicherstellen, dass die ursprünglichen Inhalte respektiert werden.
             </p>
@@ -182,7 +77,7 @@
             <p>
                 Falls du weitere Fragen hast, uns Feedback geben möchtest oder spezielle Wünsche hast, zögere bitte nicht, uns zu kontaktieren. 
                 Wir sind immer daran interessiert, unseren Service zu verbessern und die bestmögliche Nutzererfahrung sowohl für Rezeptsuchende als auch für Webseitenbetreiber zu gewährleisten.
-                <br/>E-Mailadresse: <a href="mailto:kontakt@finde-dein-rezept.de">kontakt@finde-dein-rezept.de</a>
+                <br/>E-Mailadresse: <a href="mailto:kontakt@finde-dein-rezept.de" class="jsTooltip" title="Kontakt@finde-dein-rezept.de">kontakt@finde-dein-rezept.de</a>
             </p>
             <footer>
                 &copy; 2024 Finde-Mein-Rezept.de

@@ -16,26 +16,6 @@
         <meta name="format-detection" content="telephone=no">
 
 
-    {if !$allowSpidersToIndexThisPage|isset}
-        {if ($allowSpidersToIndexThisPage|empty && ($__core->getActivePage() == null || ($allowSpidersToIndexThisPage|isset && $allowSpidersToIndexThisPage == false)))}
-            <meta name="robots" content="noindex">{/if}
-
-    {/if}
-
-    <script>
-    setTimeout(function(){
-        let preloader = document.getElementById('preloader')
-        if(preloader){literal}{preloader.classList.add('preloader-hide');}{/literal}
-            },150);
-
-    //Don't jump on Empty Links
-    const emptyHref = document.querySelectorAll('a[href="#"]')
-    emptyHref.forEach(el => el.addEventListener('click', e => {
-        e.preventDefault();
-        return false;
-    }));
-    </script>
-
     
 
     {if !$canonicalURL|empty}
@@ -46,20 +26,68 @@
         {@$headContent}
     {/if}
 
+    <script>
+        setTimeout(function(){
+            let preloader = document.getElementById('preloader')
+            if(preloader){literal}{preloader.classList.add('preloader-hide');}{/literal}
+                },300);
 
+        //Don't jump on Empty Links
+        const emptyHref = document.querySelectorAll('a[href="#"]')
+        emptyHref.forEach(el => el.addEventListener('click', e => {
+            e.preventDefault();
+            return false;
+        }));
+    </script>
 
+    {js lib='require' hasTiny=false}
+    {js file='require.config' hasTiny=false}
+    {js file='require.linearExecution' hasTiny=false}
 
-    <link rel="stylesheet" type="text/css" href="../style/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../style/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../fonts/css/fontawesome-all.min.css">
-    <link rel="manifest" href="../_manifest.json" data-pwa-version="set_in_manifest_and_pwa_js">
-    <link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
+    <script>
+    requirejs.config({
+        baseUrl: 'js/',
+        urlArgs: 't={@LAST_UPDATE_TIME}'
+    });
 
+    </script>
+
+    <script data-relocate="true">
+        __require_define_amd = define.amd;
+        define.amd = undefined;
+    </script>
+
+    {js lib='jquery' hasTiny=true}
+    {js lib='jquery-ui' hasTiny=false}
+    {js lib='bootstrap' hasTiny=false}
+
+    {literal}
+    <script data-relocate="true">
+        define.amd = __require_define_amd;
+        $.holdReady(true);
+
+        //Fix Scroll for AJAX pages.
+        if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+
+        require(['Bootstrap'], function(Bootstrap) {
+
+            Bootstrap.setup();
+
+        });
+    </script>
+    {/literal}
+
+    {if $templateName == '__userException'}
+        <link rel="stylesheet" href="style/maintenance.css">
+        {elseif $templateName == 'botinfo'}
+        <link rel="stylesheet" href="style/simple.css">
+    {else}
+        <link rel="stylesheet" href="style/main_style.css">
+    {/if}
+    <link rel="stylesheet" href="style/dark.css">
 </head>
-<body id="tpl_{$templateName}"
+<body id="page"
       itemscope itemtype="https://schema.org/WebPage"{if !$canonicalURL|empty} itemid="{$canonicalURL}"{/if} data-template="{$templateName}"
-      class="theme-dark page-highlight {if $__core->getActivePage() != null && $__core->getActivePage()->cssClassName}{$__core->getActivePage()->cssClassName}{/if}{if !$__pageCssClassName|empty} {$__pageCssClassName}{/if}">
-
+      class="page-highlight page">
 <div id="preloader"><div class="spinner-border color-highlight" role="status"></div></div>
 <span id="pageTop"></span>
