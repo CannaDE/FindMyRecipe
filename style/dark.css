@@ -8,10 +8,7 @@ html[data-color-sheme="dark"] .container {
     box-shadow: 1px 1px 15px 15px rgba(0, 0, 0, 0.1);
     background-color: rgb(26, 29, 33, 0.8);
 }
-html[data-color-sheme="dark"] h1 {
-    color: rgba(209, 210, 211, 1)
-}
-html[data-color-sheme="dark"] h2 {
+html[data-color-sheme="dark"] h1, h2 {
     color:rgb(88 139 28);
 }
 html[data-color-sheme="dark"] p {
