@@ -97,6 +97,10 @@ $initialIngredients = getAllIngredients($conn);
 $totalIngredients = countAllIngredients($conn);
 ?>
 
+<?php
+// PHP-Code bleibt unverändert
+?>
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -139,6 +143,24 @@ $totalIngredients = countAllIngredients($conn);
             from {bottom: 30px; opacity: 1;}
             to {bottom: 0; opacity: 0;}
         }
+
+        .ingredient-name {
+            cursor: pointer;
+        }
+
+        .ingredient-name:hover {
+            text-decoration: underline;
+        }
+
+        .merge-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Anpassung der Select2-Breite */
+        .select2-container {
+            width: 350px !important;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -153,7 +175,7 @@ $totalIngredients = countAllIngredients($conn);
                 </a>
             </div>
             <div class="flex justify-between mb-4">
-                <input type="text" id="searchInput" placeholder="Suche nach Zutaten..." class="w-2/3 p-2 border rounded">
+                <input type="text" id="searchInput" placeholder="Suche nach Zutaten..." class="w-1/3 p-2 border rounded">
                 <select id="sortSelect" class="w-1/3 p-2 border rounded ml-2">
                     <option value="name">Name (A-Z)</option>
                     <option value="name DESC">Name (Z-A)</option>
@@ -176,16 +198,15 @@ $totalIngredients = countAllIngredients($conn);
                                 <td class="p-2"><?php echo $ingredient['id']; ?></td>
                                 <td class="p-2">
                                     <span class="ingredient-name" data-id="<?php echo $ingredient['id']; ?>">
-                                        <?php echo htmlspecialchars($ingredient['name']); ?>
+                                        <?php echo htmlspecialchars(trim($ingredient['name'])); ?>
                                     </span>
                                 </td>
                                 <td class="p-2">
                                     <div class="flex items-center">
-                                        <select class="ingredient-select w-48 mr-2">
+                                        <select class="ingredient-select mr-2">
                                             <option value="">Zutat zum Zusammenführen auswählen</option>
                                         </select>
-                                        <button class="merge-button bg-green-500 text-white px-2 py-1 rounded mr-2" disabled>Zusammenführen</button>
-                                        <button class="edit-button bg-blue-500 text-white px-2 py-1 rounded">Bearbeiten</button>
+                                        <button class="merge-button bg-green-500 text-white px-2 py-1 rounded mr-2 ml-2" disabled>Zusammenführen</button>
                                     </div>
                                     <span class="error text-red-500 font-bold mt-1" style="display: none;"></span>
                                 </td>
@@ -194,213 +215,241 @@ $totalIngredients = countAllIngredients($conn);
                     </tbody>
                 </table>
             </div>
-            <button id="loadMore" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Mehr laden</button>
+            <div class="text-center mt-4">
+                <button id="loadMore" class="bg-blue-500 text-white px-4 py-2 rounded">Mehr laden</button>
+            </div>
         </div>
     </div>
 
+    <script src="modal.js"></script>
     <script>
-        $(document).ready(function() {
-            var offset = <?php echo count($initialIngredients); ?>;
-            var totalIngredients = <?php echo $totalIngredients; ?>;
-            var currentSearch = '';
-            var currentSort = 'name';
-            var currentOrder = 'ASC';
+    $(document).ready(function() {
+        var offset = <?php echo count($initialIngredients); ?>;
+        var totalIngredients = <?php echo $totalIngredients; ?>;
+        var currentSearch = '';
+        var currentSort = 'name';
+        var currentOrder = 'ASC';
+        var isLoading = false;
 
-            function initSelect2() {
-                $('.ingredient-select').select2({
-                    ajax: {
-                        url: 'deduplicate_ingredients.php',
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                action: 'loadMoreIngredients',
-                                offset: 0,
-                                search: params.term
-                            };
-                        },
-                        processResults: function (data) {
-                            return {
-                                results: $.map(data, function (item) {
-                                    return {
-                                        text: item.name + ' (ID: ' + item.id + ')',
-                                        id: item.id
-                                    }
-                                })
-                            };
-                        },
-                        cache: true
+        function initSelect2() {
+            $('.ingredient-select').select2({
+                ajax: {
+                    url: 'deduplicate_ingredients.php',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            action: 'loadMoreIngredients',
+                            offset: 0,
+                            search: params.term
+                        };
                     },
-                    minimumInputLength: 1
-                });
-            }
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.name.trim() + ' (ID: ' + item.id + ')',
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 1
+            });
+        }
 
-            initSelect2();
-
-            $('.ingredient-select').on('change', function() {
-                $(this).siblings('.merge-button').prop('disabled', !$(this).val());
+        function initEventHandlers() {
+            $('.ingredient-select').off('change').on('change', function() {
+                var mergeButton = $(this).siblings('.merge-button');
+                mergeButton.prop('disabled', !$(this).val());
+                if ($(this).val()) {
+                    mergeButton.removeClass('opacity-50 cursor-not-allowed');
+                } else {
+                    mergeButton.addClass('opacity-50 cursor-not-allowed');
+                }
             });
 
-            $(document).on('click', '.merge-button', function() {
+            $('.merge-button').off('click').on('click', function() {
                 var row = $(this).closest('tr');
                 var remove_id = row.data('id');
                 var keep_id = row.find('.ingredient-select').val();
                 var remove_name = row.find('.ingredient-name').text();
                 var keep_name = row.find('.ingredient-select option:selected').text();
 
-                if (confirm('Sind Sie sicher, dass Sie "' + remove_name + '" in "' + keep_name + '" zusammenführen möchten?')) {
-                    $.ajax({
-                        url: 'deduplicate_ingredients.php',
-                        method: 'POST',
-                        data: {
-                            action: 'mergeIngredients',
-                            keep_id: keep_id,
-                            remove_id: remove_id
-                        },
-                        success: function(response) {
-                            var result = JSON.parse(response);
-                            if (result.success) {
-                                showToast('Zutaten erfolgreich zusammengeführt');
-                                row.remove();
-                            } else {
-                                showToast('Fehler: ' + result.error, false);
+                modal.show(
+                    'Zutaten zusammenführen',
+                    `Sind Sie sicher, dass Sie "${remove_name}" in "${keep_name}" zusammenführen möchten?`,
+                    function() {
+                        $.ajax({
+                            url: 'deduplicate_ingredients.php',
+                            method: 'POST',
+                            data: {
+                                action: 'mergeIngredients',
+                                keep_id: keep_id,
+                                remove_id: remove_id
+                            },
+                            success: function(response) {
+                                var result = JSON.parse(response);
+                                if (result.success) {
+                                    showToast('Zutaten erfolgreich zusammengeführt');
+                                    row.remove();
+                                } else {
+                                    showToast('Fehler: ' + result.error, false);
+                                }
+                            },
+                            error: function() {
+                                showToast('Ein Fehler ist aufgetreten', false);
                             }
-                        },
-                        error: function() {
-                            showToast('Ein Fehler ist aufgetreten', false);
-                        }
-                    });
-                }
-            });
-
-            $('#searchInput').on('input', function() {
-                currentSearch = $(this).val();
-                offset = 0;
-                $('#ingredientsTable tbody').empty();
-                loadIngredients();
-            });
-
-            function loadIngredients() {
-                $.ajax({
-                    url: 'deduplicate_ingredients.php',
-                    method: 'GET',
-                    data: {
-                        action: 'loadMoreIngredients',
-                        offset: offset,
-                        search: currentSearch,
-                        sort: currentSort,
-                        order: currentOrder
-                    },
-                    success: function(response) {
-                        var ingredients = JSON.parse(response);
-                        ingredients.forEach(function(ingredient) {
-                            var newRow = $('<tr data-id="' + ingredient.id + '" class="border-b">' +
-                                '<td class="p-2">' + ingredient.id + '</td>' +
-                                '<td class="p-2"><span class="ingredient-name" data-id="' + ingredient.id + '">' + ingredient.name + '</span></td>' +
-                                '<td class="p-2">' +
-                                '<div class="flex items-center">' +
-                                '<select class="ingredient-select w-48 mr-2">' +
-                                '<option value="">Zutat zum Zusammenführen auswählen</option>' +
-                                '</select>' +
-                                '<button class="merge-button bg-green-500 text-white px-2 py-1 rounded mr-2" disabled>Zusammenführen</button>' +
-                                '<button class="edit-button bg-blue-500 text-white px-2 py-1 rounded">Bearbeiten</button>' +
-                                '</div>' +
-                                '<span class="error text-red-500 font-bold mt-1" style="display: none;"></span>' +
-                                '</td>' +
-                                '</tr>');
-                            $('#ingredientsTable tbody').append(newRow);
                         });
-                        initSelect2();
-                        offset += ingredients.length;
-                        if (offset >= totalIngredients) {
-                            $('#loadMore').hide();
-                        }
-                    },
-                    error: function() {
-                        showToast('Fehler beim Laden weiterer Zutaten', false);
                     }
-                });
-            }
-
-            $('#loadMore').click(loadIngredients);
-
-            $('#sortSelect').change(function() {
-                var sortValue = $(this).val();
-                if (sortValue.includes('DESC')) {
-                    currentSort = sortValue.replace(' DESC', '');
-                    currentOrder = 'DESC';
-                } else {
-                    currentSort = sortValue;
-                    currentOrder = 'ASC';
-                }
-                offset = 0;
-                $('#ingredientsTable tbody').empty();
-                loadIngredients();
+                );
             });
 
-            $(document).on('click', '.edit-button', function() {
-                var row = $(this).closest('tr');
-                var nameSpan = row.find('.ingredient-name');
-                var currentName = nameSpan.text();
+            $('.ingredient-name').off('click').on('click', function() {
+                var span = $(this);
+                var currentName = span.text().trim();
                 var input = $('<input type="text" class="border p-1 w-full">').val(currentName);
                 
-                nameSpan.hide().after(input);
+                span.hide().after(input);
                 input.focus();
 
                 input.blur(function() {
-                    updateIngredientName(nameSpan.data('id'), input.val(), nameSpan, input);
+                    updateIngredientName(span.data('id'), input.val().trim(), span, input);
                 });
 
                 input.keypress(function(e) {
                     if (e.which == 13) {
-                        updateIngredientName(nameSpan.data('id'), input.val(), nameSpan, input);
+                        updateIngredientName(span.data('id'), input.val().trim(), span, input);
                     }
                 });
             });
+        }
 
-            function updateIngredientName(ingredient_id, new_name, span, input) {
-                $.ajax({
-                    url: 'deduplicate_ingredients.php',
-                    method: 'POST',
-                    data: {
-                        action: 'updateIngredientName',
-                        ingredient_id: ingredient_id,
-                        new_name: new_name
-                    },
-                    success: function(response) {
-                        var result = JSON.parse(response);
-                        if (result.success) {
-                            showToast('Zutatennamen geändert');
-                            span.text(new_name).show();
-                            input.remove();
-                        } else {
-                            showToast('Fehler beim Aktualisieren des Zutatennamen', false);
-                            span.show();
-                            input.remove();
-                        }
-                    },
-                    error: function() {
-                        showToast('Ein Fehler ist aufgetreten', false);
+        initSelect2();
+        initEventHandlers();
+
+        $('#searchInput').on('input', function() {
+            currentSearch = $(this).val();
+            offset = 0;
+            $('#ingredientsTable tbody').empty();
+            loadIngredients();
+        });
+
+        function loadIngredients() {
+            if (isLoading) return;
+            isLoading = true;
+            $.ajax({
+                url: 'deduplicate_ingredients.php',
+                method: 'GET',
+                data: {
+                    action: 'loadMoreIngredients',
+                    offset: offset,
+                    search: currentSearch,
+                    sort: currentSort,
+                    order: currentOrder
+                },
+                success: function(response) {
+                    var ingredients = JSON.parse(response);
+                    ingredients.forEach(function(ingredient) {
+                        var newRow = $('<tr data-id="' + ingredient.id + '" class="border-b">' +
+                            '<td class="p-2">' + ingredient.id + '</td>' +
+                            '<td class="p-2"><span class="ingredient-name" data-id="' + ingredient.id + '">' + ingredient.name.trim() + '</span></td>' +
+                            '<td class="p-2">' +
+                            '<div class="flex items-center">' +
+                            '<select class="ingredient-select mr-2">' +
+                            '<option value="">Zutat zum Zusammenführen auswählen</option>' +
+                            '</select>' +
+                            '<button class="merge-button bg-green-500 text-white px-2 py-1 rounded mr-2 opacity-50 cursor-not-allowed" disabled>Zusammenführen</button>' +
+                            '</div>' +
+                            '<span class="error text-red-500 font-bold mt-1" style="display: none;"></span>' +
+                            '</td>' +
+                            '</tr>');
+                        $('#ingredientsTable tbody').append(newRow);
+                    });
+                    initSelect2();
+                    initEventHandlers();
+                    offset += ingredients.length;
+                    if (offset >= totalIngredients) {
+                        $('#loadMore').hide();
+                    } else {
+                        $('#loadMore').show();
+                    }
+                    isLoading = false;
+                },
+                error: function() {
+                    showToast('Fehler beim Laden weiterer Zutaten', false);
+                    isLoading = false;
+                }
+            });
+        }
+
+        $('#loadMore').click(loadIngredients);
+
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                loadIngredients();
+            }
+        });
+
+        $('#sortSelect').change(function() {
+            var sortValue = $(this).val();
+            if (sortValue.includes('DESC')) {
+                currentSort = sortValue.replace(' DESC', '');
+                currentOrder = 'DESC';
+            } else {
+                currentSort = sortValue;
+                currentOrder = 'ASC';
+            }
+            offset = 0;
+            $('#ingredientsTable tbody').empty();
+            loadIngredients();
+        });
+
+        function updateIngredientName(ingredient_id, new_name, span, input) {
+            $.ajax({
+                url: 'deduplicate_ingredients.php',
+                method: 'POST',
+                data: {
+                    action: 'updateIngredientName',
+                    ingredient_id: ingredient_id,
+                    new_name: new_name
+                },
+                success: function(response) {
+                    var result = JSON.parse(response);
+                    if (result.success) {
+                        showToast('Zutatennamen geändert');
+                        span.text(new_name).show();
+                        input.remove();
+                    } else {
+                        showToast('Fehler beim Aktualisieren des Zutatennamen', false);
                         span.show();
                         input.remove();
                     }
-                });
-            }
- 
-            function showToast(message, isSuccess = true) {
-                var toast = document.createElement('div');
-                toast.className = 'toast';
-                toast.style.backgroundColor = isSuccess ? '#4CAF50' : '#f44336'; // Grün für Erfolg, Rot für Fehler
-                toast.innerText = message;
-                document.body.appendChild(toast);
+                },
+                error: function() {
+                    showToast('Ein Fehler ist aufgetreten', false);
+                    span.show();
+                    input.remove();
+                }
+            });
+        }
 
-                toast.className += ' show';
-                setTimeout(function() {
-                    toast.className = toast.className.replace(' show', '');
-                    document.body.removeChild(toast);
-                }, 3000);
-            }
-        });
+        function showToast(message, isSuccess = true) {
+            var toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.backgroundColor = isSuccess ? '#4CAF50' : '#f44336';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+
+            toast.className += ' show';
+            setTimeout(function() {
+                toast.className = toast.className.replace(' show', '');
+                document.body.removeChild(toast);
+            }, 3000);
+        }
+    });
     </script>
 </body>
 </html>
