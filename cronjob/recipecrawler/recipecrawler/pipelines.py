@@ -56,7 +56,7 @@ class MySQLPipeline:
             return
         cursor = connection.cursor()
         try:
-            cursor.execute("SELECT url FROM recipes")
+            cursor.execute("SELECT url FROM fmr_recipes")
             return [row[0] for row in cursor.fetchall()]
         except Error as e:
             print(f"Error fetching existing recipes: {e}")
@@ -99,7 +99,7 @@ class MySQLPipeline:
             parsed_url = urlparse(url)
             full_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
 
-            cursor.execute("SELECT id FROM sources WHERE url = %s", (full_url,))
+            cursor.execute("SELECT id FROM fmr_sources WHERE url = %s", (full_url,))
             result = cursor.fetchone()
             if result:
                 source_id = result[0]
@@ -107,7 +107,7 @@ class MySQLPipeline:
                 parsed_url = urlparse(full_url)
                 domain = parsed_url.netloc
                 name = domain.split('.')[-2]  # Nimmt den Teil vor der Top-Level-Domain
-                cursor.execute("INSERT INTO sources (url, name) VALUES (%s, %s)", (full_url, name))
+                cursor.execute("INSERT INTO fmr_sources (url, name) VALUES (%s, %s)", (full_url, name))
                 connection.commit()
                 source_id = cursor.lastrowid
                 self.spider.newRecipesCounter += 1
@@ -128,12 +128,12 @@ class MySQLPipeline:
         cursor = connection.cursor()
 
         try:
-            query_check = "SELECT COUNT(*) FROM recipe_ingredients WHERE recipe_id = %s AND ingredient_id = %s"
+            query_check = "SELECT COUNT(*) FROM fmr_recipe_ingredients WHERE recipe_id = %s AND ingredient_id = %s"
             cursor.execute(query_check, (recipe_id, ingredient_id))
             exists = cursor.fetchone()[0] > 0
 
             if not exists:
-                query_insert = "INSERT INTO recipe_ingredients (recipe_id, ingredient_id) VALUES (%s, %s)"
+                query_insert = "INSERT INTO fmr_recipe_ingredients (recipe_id, ingredient_id) VALUES (%s, %s)"
                 cursor.execute(query_insert, (recipe_id, ingredient_id))
                 connection.commit()
 
@@ -162,7 +162,7 @@ class MySQLPipeline:
             
             source_id = self.get_or_create_source_id(item['url'])
 
-            query = "INSERT INTO recipes (title, description, source_id, url, image_url, duration) VALUES (%s, %s, %s, %s, %s, 0)"
+            query = "INSERT INTO fmr_recipes (title, description, source_id, url, image_url, duration) VALUES (%s, %s, %s, %s, %s, 0)"
             cursor.execute(query, (item['title'], item['description'], source_id, item['url'], item['image']))
             connection.commit()
             recipe_id = cursor.lastrowid

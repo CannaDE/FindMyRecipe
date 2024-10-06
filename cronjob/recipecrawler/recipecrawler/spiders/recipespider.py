@@ -112,7 +112,7 @@ class RecipecSpider(scrapy.Spider):
                 small.decompose()
             # Füge den bereinigten Text zur Liste hinzu
             ingredient_name = item.get_text(strip=True)
-            cleaned_ingredient = self.clean_ingredient_name(ingredient_name)
+            cleaned_ingredient = self.clean_ingredient(ingredient_name)
             if cleaned_ingredient:
                 ingredients.append(cleaned_ingredient)
 
@@ -131,6 +131,18 @@ class RecipecSpider(scrapy.Spider):
             'ingredients': ingredients,
             'url': response.url,
         }
+    def clean_ingredient(self, ingredient):
+        # Entferne Mengenangaben mit Maßeinheiten
+        ingredient = re.sub(r'\b\d+(\.\d+)?\s*(kg|g|l|ml|EL|TL|Stück|Tasse|Tassen|Prise|Scheiben|Stück|Stücke|Kopf|gemahlen|getrocknet|kl.|Esslöffel|Teelöffel|Liter|Gramm|½|Stk.|Stück|)\b', '', ingredient, flags=re.IGNORECASE)
+        # Entferne Mengenangaben ohne Maßeinheiten
+        ingredient = re.sub(r'\b\d+(\.\d+)?\b', '', ingredient)
+        # Entferne Klammern und deren Inhalt
+        ingredient = re.sub(r'\(.*?\)', '', ingredient)
+         # Entferne Strings mit nur einem Zeichen
+        ingredient = re.sub(r'\b\w\b', '', ingredient)
+        # Entferne überflüssige Leerzeichen, Kommas und Bindestriche
+        ingredient = re.sub(r'[-,\s]+', ' ', ingredient).strip()
+        return ingredient
     
     def clean_ingredient_name(self, ingredient_text):
         # Entfernt alle Zahlen aus dem String
