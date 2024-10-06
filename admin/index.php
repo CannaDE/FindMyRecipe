@@ -103,24 +103,26 @@
             }
             ?>
         </p>
-        <div class="space-y-4">
-            <a href="manage_ingredients.php" class="block w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-center">
-                Zutaten verwalten
-            </a>
-            <a href="deduplicate_ingredients.php" class="block w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-center">
-                Zutaten deduplizieren
-            </a>
+        <div class="menu" <?php if (!isset($_SERVER['PHP_AUTH_USER'])) { echo 'style="display: none;"'; } ?>>
+            <div class="space-y-4">
+                <a href="manage_ingredients.php" class="block w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-center">
+                    Zutaten verwalten
+                </a>
+                <a href="deduplicate_ingredients.php" class="block w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-center">
+                    Zutaten deduplizieren
+                </a>
 
-            <a href="duplicates_ingredients.php" class="block w-full py-2 px-4g bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-center">
-                Doppelte Zutaten zusammenführen
-            </a>
-            <hr class="divider"/>
-            <a href="manage_websites.php" class="block w-full py-2 px-4 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-300 text-center">
-                websites.yaml
-            </a>
-            <a href="crawler_log.php" class="block w-full py-2 px-4 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-300 text-center">
-                crawler.log
-            </a>
+                <a href="duplicates_ingredients.php" class="block w-full py-2 px-4g bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300 text-center">
+                    Doppelte Zutaten zusammenführen
+                </a>
+                <hr class="divider"/>
+                <a href="manage_websites.php" class="block w-full py-2 px-4 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-300 text-center">
+                    websites.yaml
+                </a>
+                <a href="crawler_log.php" class="block w-full py-2 px-4 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-300 text-center">
+                    crawler.log
+                </a>
+            </div>
         </div>
         <hr />
         <p class="text-center text-gray-600 mb-4 text-xs mt-3">
@@ -135,20 +137,33 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let inputSequence = '';
-            const secretCode = 'larsstinkt'; // Der geheime String, der eingegeben werden muss
+            const secretCodes = {
+                'larsstinkt': () => document.getElementById('easterEgg').innerHTML = "Woher weißt du das? 🤔🧐",
+                'ichbindergeilste': function() {
+                    document.getElementById('easterEgg').innerHTML = "Entschuldige 🧐";
+                    document.querySelectorAll('.menu')[0].style.display = 'block';
+                },
+                'rezeptmeister': () => document.body.style.backgroundColor = 'lightgreen'
+            };
 
             document.addEventListener('keydown', function(event) {
-                inputSequence += event.key.toLowerCase(); // Füge die gedrückte Taste zur Sequenz hinzu
-                if (inputSequence.includes(secretCode)) {
-                    document.getElementById('easterEgg').innerHTML = "Woher weißt du das? 🤔🧐"; // Zeige die geheime Nachricht an
-                    inputSequence = ''; // Setze die Eingabesequenz zurück
+                inputSequence += event.key.toLowerCase();
+
+                for (const [code, action] of Object.entries(secretCodes)) {
+                    if (inputSequence.includes(code)) {
+                        action();
+                        inputSequence = '';
+                        break;
+                    }
                 }
-                // Begrenze die Länge der Eingabesequenz, um Speicherüberlauf zu vermeiden
-                if (inputSequence.length > secretCode.length) {
-                    inputSequence = inputSequence.slice(-secretCode.length);
+
+                const maxCodeLength = Math.max(...Object.keys(secretCodes).map(code => code.length));
+                if (inputSequence.length > maxCodeLength) {
+                    inputSequence = inputSequence.slice(-maxCodeLength);
                 }
             });
         });
     </script>
+    <script src="modal.js"></script>
 </body>
 </html>
