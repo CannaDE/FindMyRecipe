@@ -1,3 +1,4 @@
+{include file="header"}
     <div class="container">
         <!-- Linke Seite: Zutaten auswählen -->
         <div class="panel left-panel">
@@ -9,7 +10,12 @@
                 <input type="text" id="ingredientSearch" placeholder="Neue Zutat eingeben" onkeyup="" autocomplete="off">
                 <div id="suggestions"></div>
                 <div id="selectedIngredients"></div>
-                <div class="alert info"><span class="fa fa-info-circle"></span>Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</div>
+                <ui-notice type="info">Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</ui-notice>
+                <ui-notice type="success">Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</ui-notice>
+                                <ui-notice type="warning">Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</ui-notice>
+                <ui-notice type="error">Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</ui-notice>
+
+                <!-- <div class="alert info"><span class="fa fa-info-circle"></span>Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</div> -->
 
                 <div id="selectedIngredients"></div>
 

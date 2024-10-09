@@ -15,9 +15,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
         <meta name="format-detection" content="telephone=no">
 
-
-    
-
     {if !$canonicalURL|empty}
         <link rel="canonical" href="{$canonicalURL}">
     {/if}
@@ -69,7 +66,7 @@
         //Fix Scroll for AJAX pages.
         if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
 
-        require(['Bootstrap'], function(Bootstrap) {
+        require(['Bootstrap', 'WebComponents/UserNotice'], function(Bootstrap, UserNotice) {
 
             Bootstrap.setup();
 

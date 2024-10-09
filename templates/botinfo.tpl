@@ -38,7 +38,7 @@
 
             <h2>Wie kann ich den Bot blockieren?</h2>
             <p>Wenn du nicht möchtest, dass unser Bot deine Webseite crawlt, kannst du ihn einfach in deiner <strong>robots.txt</strong>-Datei blockieren. Füge dazu die folgende Zeile in deine <code>robots.txt</code> ein:</p>
-
+            
             <div class="info-box">
                 <code>
                 User-agent: FindMyRecipeBot/1.0 (+https://finde-mein-rezept.de/botinfo) <br>
