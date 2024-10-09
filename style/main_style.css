@@ -14,7 +14,7 @@ html[data-color-sheme="light"] .success {
     color: rgba(245, 99, 9, 1) !important;
 }
 
-.alert {
+.ui-notice {
     padding: 15px;
     margin-bottom: 10px;
     margin-top: 20px;

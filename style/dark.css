@@ -4,14 +4,14 @@ html[data-color-sheme="dark"] body, html[data-color-sheme="dark"], [data-color-s
 [data-color-sheme="dark"] #preloader {
     background-color: rgba(26, 29, 32, 1);
 }
-html[data-color-sheme="dark"] .container {
+html[data-color-sheme="dark"] .container, html[data-color-sheme="dark"] .panel {
     box-shadow: 1px 1px 15px 15px rgba(0, 0, 0, 0.1);
     background-color: rgb(26, 29, 33, 0.8);
 }
 html[data-color-sheme="dark"] h1, h2 {
     color:rgb(88 139 28);
 }
-html[data-color-sheme="dark"] p {
+html[data-color-sheme="dark"] p, small {
     color: rgba(255, 255, 255, 0.67);
 }
 html[data-color-sheme="dark"] .success {
@@ -19,6 +19,13 @@ html[data-color-sheme="dark"] .success {
     border-color: rgba(0, 113, 84, 1);
     color: rgba(180, 203, 195, 1);
 }
+
+html[data-color-sheme="dark"] .noResults {
+    color: rgb(88 139 28);
+    font-weight: bold;
+    font-size: 1.3em;
+}
+html[data-color-sheme="dark"] .noResults small { font-weight: normal; }
 
 html[data-color-sheme="dark"] .info, html[data-color-sheme="dark"] .info-box {
     background-color: rgba(12, 81, 92, 1);
