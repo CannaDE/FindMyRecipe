@@ -8,10 +8,17 @@ html[data-color-sheme="dark"] .container, html[data-color-sheme="dark"] .panel {
     box-shadow: 1px 1px 15px 15px rgba(0, 0, 0, 0.1);
     background-color: rgb(26, 29, 33, 0.8);
 }
-html[data-color-sheme="dark"] h1, h2 {
+
+html[data-color-sheme="dark"] .basic-ingredients .ingredient-button.active {
+    background-color: rgb(88 139 28);
+    color: rgba(190, 233, 195, 1);
+}
+
+html[data-color-sheme="dark"] h1, html[data-color-sheme="dark"] h2 {
     color:rgb(88 139 28);
 }
-html[data-color-sheme="dark"] p, small {
+
+html[data-color-sheme="dark"] p, html[data-color-sheme="dark"] small, html[data-color-sheme="dark"] .basic-ingredients h2 {
     color: rgba(255, 255, 255, 0.67);
 }
 html[data-color-sheme="dark"] .success {
