@@ -1,6 +1,4 @@
 html[data-color-sheme="dark"] body, html[data-color-sheme="dark"], [data-color-sheme="dark"] .container, [data-color-sheme="dark"] #preloader,
-
-,
 html[data-color-sheme="dark"] .recipeCardOverlay {
     background-color: rgba(26, 29, 33, 1);
 }
