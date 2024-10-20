@@ -264,6 +264,8 @@ body, html {
 
 .recipeCardOverlay[data-aria-hidden="false"] {
     visibility: visible;
+    transform: translateX(0);
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55), visibility 0s;
     animation-name: slideIn;
 }
 
@@ -280,11 +282,12 @@ body, html {
     bottom: 0;
     height: 100%;
     displaY: block;
-    background: white;
+    background-color: white;
     visibility: hidden;
     max-width: 25%;
+    min-width: 25%;
     transform: translateX(100%);
-    transition: visibility 0s, transform 0.5s ease-in-out; /* Sanfte Umwandlung */
+    transition: visibility 0s ease-in-out 0.5s, transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
 }
@@ -293,22 +296,45 @@ body, html {
     width: 100%;
 }
 
+.recipeCardOverlay .imgMenue {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+}
+
+
 /* Keyframes für die Vorwärtsanimation (rein) */
 @keyframes slideIn {
-    from {
+    0% {
         transform: translateX(100%);
     }
-    to {
-        transform: translateX(0);
+    60% {
+        transform: translateX(-10%);
+    }
+    80% {
+        transform: translateX(5%);
+    }
+    100% {
+        transform: translateX(0%);
     }
 }
 
 /* Keyframes für die Rückwärtsanimation (raus) */
 @keyframes slideOut {
-    from {
-        transform: translateX(0);
+    0% {
+        transform: translateX(0%);
     }
-    to {
+    20% {
+        transform: translateX(5%);
+    }
+    40% {
+        transform: translateX(-10%);
+    }
+    100% {
         transform: translateX(100%);
     }
 }
