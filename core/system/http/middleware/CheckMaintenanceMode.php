@@ -22,7 +22,6 @@ final class CheckMaintenanceMode implements MiddlewareInterface {
             if(MAINTENANCE_MODE && RequestHandler::getInstance()->getActiveRequest()->isAvailableInMaintenanceMode()) {
                 return $handler->handle($request);
             }
-            
             if(MAINTENANCE_MODE) {
                 header("HTTP/1.1 503 Service Unavailable");
 

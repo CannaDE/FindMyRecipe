@@ -50,6 +50,10 @@
     </div>
 
     <script>
+
+        require(['Ui/Ingredients'], function (Ingredients) {
+            Ingredients.setup();
+        });
         
         function fetchSuggestions() {
             const input = document.getElementById('ingredientSearch').value;
@@ -87,7 +91,7 @@
             xhr.open('GET', '/dev/fetch_recipes.php?ingredients=' + encodeURIComponent(JSON.stringify(selectedIngredients)), true);
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    response = JSON.parse(xhr.responseText);
+                    let response = JSON.parse(xhr.responseText);
                     document.getElementById('recipeResults').innerHTML = "";
                     if(response['recipes'] !== null && response['recipes'].length > 0) {
                         for(let i = 0; i < response['recipes'].length; i++) {
