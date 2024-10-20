@@ -427,7 +427,7 @@ define(["require", "exports", "tslib", "Ui/Screen", "Ui/Overlay", "Dom/Util", "D
                 Util.setInnerHtml(data.content, html);
             }
             if (Core.stringToBool(data.modal.getAttribute("aria-hidden"))) {
-                UiOverlay.default.execute();
+                UiOverlay.execute();
                 if (data.closable && Core.stringToBool(_container.getAttribute("aria-hidden"))) {
                     window.addEventListener("keyup", _keyupListener);
                 }

@@ -240,13 +240,9 @@ define(["require", "exports", "tslib", "Ajax/Status", "Core", "Dom/Listener", "U
             }
             if (options.ignoreError !== true && showError) {
                 const html = this.getErrorHtml(data, xhr);
-                console.log(html);
-                //if (html) {
-                //    UiDialog.openStatic("ajaxRequestError", html, {
-                //        title: "Request Error",
-                //     });
-                // }
-
+                UiDialog.openStatic("ajaxRequestError", html, {
+                    title: "Request Error",
+                });
             }
             this._finalize(options);
         }
