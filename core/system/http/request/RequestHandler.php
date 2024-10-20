@@ -8,6 +8,7 @@ use fmr\system\exception\RouteHandlerException;
 use fmr\system\http\middleware\Middleware;
 use fmr\system\http\middleware\CheckSystemEnvironment;
 use fmr\system\http\middleware\CheckMaintenanceMode;
+use fmr\system\http\middleware\SessionMiddleware;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\ServerRequestFilter\FilterUsingXForwardedHeaders;

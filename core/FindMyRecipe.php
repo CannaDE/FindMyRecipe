@@ -8,18 +8,41 @@ use fmr\system\database\Database;
 
 use fmr\system\template\TemplateEngine;
 use fmr\system\http\request\RouteHandler;
+use fmr\util\CryptoUtil;
+
 class FindMyRecipe {
 
     protected static Database|string $databaseObject = '';
 
     protected static TemplateEngine $templateEngine;
+
+    private string $xsrfToken = '';
     public function __construct() {
+        $this->initSecurityToken();
         $this->initTemplateEngine();
         $this->initDatabase();
     }
 
     public function initDatabase(): void {
         self::$databaseObject = new Database();
+    }
+
+    public function initSecurityToken(): void
+    {
+        $xsrfToken = '';
+        if (!empty($_COOKIE['XSRF_TOKEN'])) {
+            if (CryptoUtil::validateSignedString($_COOKIE['XSRF_TOKEN'])) {
+                $xsrfToken = $_COOKIE['XSRF_TOKEN'];
+            }
+
+        }
+        if (!$xsrfToken) {
+            $xsrfToken = CryptoUtil::createSignedString(random_bytes(18));
+
+            $sameSite = '; SameSite=lax';
+            \header('set-cookie: XSRF_TOKEN=' . rawurlencode($xsrfToken) . '; path=/' . (RouteHandler::secureConnection() ? '; secure' : '') . $sameSite, false);
+        }
+        $this->xsrfToken = $xsrfToken;
     }
 
     protected function initTemplateEngine(): void {
@@ -31,6 +54,18 @@ class FindMyRecipe {
         $core = $this;
         self::getTpl()->registerPrefilter(['event', 'csrfToken']);
         self::getTpl()->assignVar(['__core' => $core]);
+    }
+
+    public function getSecurityToken(): string
+    {
+        return $this->xsrfToken;
+    }
+
+    protected function checkSecurityToken(string $token): bool
+    {
+        $token = str_replace(' ', '+', $token);
+
+        return hash_equals($this->xsrfToken, $token);
     }
 
 
@@ -239,6 +274,6 @@ class FindMyRecipe {
             return self::__callStatic($name, $arguments);
         }
 
-        throw new \BadMethodCallException("Call to undefined method TimeMonitoring::{$name}().");
+        throw new \BadMethodCallException("Call to undefined method FindMyRecipe::{$name}().");
     }
 }
