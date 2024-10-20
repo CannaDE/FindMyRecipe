@@ -1,3 +1,74 @@
+.modalContainer {
+    z-index: 101;
+    position: absolute;
+    top: 10%;
+    overflow-y: scroll;
+    transform: translate(-50%, -50%, 0, 0);
+    background-color: rgb(35, 39, 43);
+    overflow-x: hidden !important;
+    grid-area: dialog;
+    min-width: 500px;
+    max-width: 80%;
+    max-height: 80%;
+    justify-self: center;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #333333;
+    border-radius: 5px;
+}
+
+.font-italic {
+    font-style: italic;
+}
+
+.text-color-red {
+    color: lightcoral !important;
+}
+
+.text-color-green {
+    color: #2d502d !important;
+}
+
+.divider {
+    border-top: 1px solid rgba(245, 99, 9, 1);
+    width: 50px;
+    margin: 20px auto;
+}
+
+.modalContainer[aria-hidden="true"] {
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.modalContainer[aria-hidden="false"] {
+    animation: ease-in 0.3s;
+    animation-fill-mode: forwards;
+}
+
+.modalContainer header {
+    display: flex;
+    border-bottom: 1px solid #3c3c3c;
+    padding: 10px 15px;
+    text-shadow: 0 0 8px #000000;
+    background-color: rgb(29, 34, 39);
+}
+
+.modalContainer header span {
+    font-size: 16px;
+    flex: 1 auto;
+    line-height: 1.28;
+}
+
+.modalContainer header span .modalTitle {
+    font-weight: 500;
+}
+
+.modalContainer .dialogCloseButton {
+    flex: 0 0 auto;
+}
+
+
+
+
 /* LIGHT THEME DEFAULT */
 html[data-color-sheme="light"] body, html[data-color-sheme="light"] #preloader{
     background-color: #f4f4f4;
@@ -177,7 +248,7 @@ body, html {
     margin-right: 10px;
 }
 
-.results {
+.results, .recipe-container {
     display: flex;
     flex-wrap: wrap; /* Erlaubt Zeilenumbruch */
     gap: 20px; /* Abstand zwischen den Rezepten */
@@ -191,46 +262,103 @@ body, html {
     margin-top: 25%;
 }
 
+.recipeCardOverlay[data-aria-hidden="false"] {
+    visibility: visible;
+    animation-name: slideIn;
+}
+
+.recipeCardOverlay[data-aria-hidden="true"] {
+    animation-name: slideOut;
+}
+
+.recipeCardOverlay {
+    position: absolute;
+    top: 0;
+    z-indeX: 100;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    displaY: block;
+    background: white;
+    visibility: hidden;
+    max-width: 25%;
+    transform: translateX(100%);
+    transition: visibility 0s, transform 0.5s ease-in-out; /* Sanfte Umwandlung */
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.recipeCardOverlay img {
+    width: 100%;
+}
+
+/* Keyframes für die Vorwärtsanimation (rein) */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Keyframes für die Rückwärtsanimation (raus) */
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
 .recipe {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex; /* Flexbox für quadratische Anordnung */
     overflow: hidden; /* Verhindert Überlappungen */
-    width: calc(50% - 10px); /* 2 Rezepte pro Zeile mit Abstand */
-    max-height: 160px; /* Maximale Höhe des Rezepts */
+    width: calc(50% - 12px); /* 2 Rezepte pro Zeile mit Abstand */
+    max-height: 110px; /* Maximale Höhe des Rezepts */
 }
 
 .recipe img {
-    width: 150px; /* Feste Breite für das Bild */
-    height: 150px; /* Feste Höhe für das Bild */
+    width: 120px; /* Feste Breite für das Bild */
+    height: 120px; /* Feste Höhe für das Bild */
     object-fit: cover; /* Bild passt in den Container */
 }
 
 .recipe-content {
-    padding: 15px; /* Abstand um den Text */
-    display: flex;
-    flex-direction: column; /* Textinhalt untereinander */
-    justify-content: center; /* Zentriert den Inhalt */
-    flex: 1; /* Füllt den verfügbaren Platz */
+    padding-left: 5px;
+    padding-right: 5px;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
 }
 
 .recipe h2 {
-    font-size: 20px;
-    margin: 10px 0;
+    font-size: 16px;
+    margin: 3px 0;
     color: #2C3E50;
 }
 
+.recipe p.description {
+    font-size: 13px;
+}
 .recipe p {
     font-size: 16px;
     color: #666;
-    margin-bottom: 10px;
 }
 
 .recipe .source {
     font-size: 14px;
     color: #888;
     margin-bottom: 10px;
+}
+
+.recipe small {
+    display: block;
 }
 
 .recipe a {
@@ -242,6 +370,7 @@ body, html {
     text-decoration: none;
     font-weight: bold;
     margin-top: 10px;
+    width: calc(100% - 30px);
 }
 
 .recipe a:hover {
