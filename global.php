@@ -6,6 +6,8 @@ if(!defined('TMP_DIR')) define('TMP_DIR', BASE_DIR . 'tmp/');
 if(!defined('CORE_PATH')) define('CORE_PATH', BASE_DIR . 'core/');
 if(!defined('LOG_DIR')) define('LOG_DIR', 'log/');
 
+define('SIGNATURE_SECRET', 'A8f!kL4m@S2d$B7xN&1pQ');
+
 define('ENABLE_DEV_MODE', true);
 define('LAST_UPDATE_TIME', time());
 
