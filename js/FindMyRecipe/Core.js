@@ -1,11 +1,5 @@
 /**
  * Provides the basic core functionality.
- *
- * @author  Alexander Ebert
- * @copyright  2001-2019 WoltLab GmbH
- * @license  GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @module  Core (alias)
- * @module  WoltLabSuite/Core/Core
  */
 define(["require", "exports"], function (require, exports) {
     "use strict";
@@ -42,26 +36,6 @@ define(["require", "exports"], function (require, exports) {
         return _clone(obj);
     }
     exports.clone = clone;
-    /**
-     * Converts WCF 2.0-style URLs into the default URL layout.
-     */
-    function convertLegacyUrl(url) {
-        return url.replace(/^index\.php\/(.*?)\/\?/, (match, controller) => {
-            const parts = controller.split(/([A-Z][a-z0-9]+)/);
-            controller = "";
-            for (let i = 0, length = parts.length; i < length; i++) {
-                const part = parts[i].trim();
-                if (part.length) {
-                    if (controller.length) {
-                        controller += "-";
-                    }
-                    controller += part.toLowerCase();
-                }
-            }
-            return `index.php?${controller}/&`;
-        });
-    }
-    exports.convertLegacyUrl = convertLegacyUrl;
     /**
      * Merges objects with the first argument.
      *
@@ -114,7 +88,6 @@ define(["require", "exports"], function (require, exports) {
      * });
      *
      * @see  https://github.com/nodejs/node/blob/7d14dd9b5e78faabb95d454a79faa513d0bbc2a5/lib/util.js#L697-L735
-     * @deprecated 5.4 Use the native `class` and `extends` keywords instead.
      */
     function inherit(constructor, superConstructor, propertiesObject) {
         if (constructor === undefined || constructor === null) {
