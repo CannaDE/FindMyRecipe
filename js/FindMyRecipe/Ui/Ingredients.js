@@ -224,6 +224,9 @@ define(["require", "exports", "Ajax", "Ui/Overlay"], function (require, exports,
             img.src = recipe.recipe.image
             img.alt = recipe.recipe.title;
             img.classList.add("recipe-image");
+            img.onerror = () => {
+                img.src = "../images/recipe-placeholder.jpg";
+            }
             recipeDiv.appendChild(img);
 
             let recipeContent = document.createElement('div');
@@ -272,6 +275,9 @@ define(["require", "exports", "Ajax", "Ui/Overlay"], function (require, exports,
         let img = document.createElement('img');
         img.src = recipe.image;
         img.alt = recipe.title;
+        img.onerror = () => {
+            img.src = "../images/recipe-placeholder.jpg";
+        }
         img.classList.add("recipe-image");
 
         let imgMenue = document.createElement('div');
