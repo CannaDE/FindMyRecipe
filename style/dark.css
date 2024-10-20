@@ -1,4 +1,7 @@
-html[data-color-sheme="dark"] body, html[data-color-sheme="dark"], [data-color-sheme="dark"] .container, [data-color-sheme="dark"] #preloader {
+html[data-color-sheme="dark"] body, html[data-color-sheme="dark"], [data-color-sheme="dark"] .container, [data-color-sheme="dark"] #preloader,
+
+,
+html[data-color-sheme="dark"] .recipeCardOverlay {
     background-color: rgba(26, 29, 33, 1);
 }
 [data-color-sheme="dark"] #preloader {
@@ -7,6 +10,12 @@ html[data-color-sheme="dark"] body, html[data-color-sheme="dark"], [data-color-s
 html[data-color-sheme="dark"] .container, html[data-color-sheme="dark"] .panel {
     box-shadow: 1px 1px 15px 15px rgba(0, 0, 0, 0.1);
     background-color: rgb(26, 29, 33, 0.8);
+}
+
+html[data-color-sheme="dark"] .recipe {
+    box-shadow: 1px 1px 15px 15px rgba(0, 0, 0, 0.1);
+    background-color: rgb(26, 29, 33, 0.8);
+    border: 1px solid #353535;
 }
 
 html[data-color-sheme="dark"] .basic-ingredients .ingredient-button.active {
