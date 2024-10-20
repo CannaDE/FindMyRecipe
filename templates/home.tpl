@@ -11,9 +11,6 @@
                 <div id="suggestions"></div>
                 <div id="selectedIngredients"></div>
                 <ui-notice type="info">Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</ui-notice>
-                <ui-notice type="success">Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</ui-notice>
-                                <ui-notice type="warning">Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</ui-notice>
-                <ui-notice type="error">Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</ui-notice>
 
                 <!-- <div class="alert info"><span class="fa fa-info-circle"></span>Wir gehen davon aus, dass du Salz und Pfeffer zu Hause hast.</div> -->
 
